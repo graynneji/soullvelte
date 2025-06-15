@@ -1,0 +1,157 @@
+.sidebar {
+  min-width: 350px;
+  height: 100vh;
+  background-color: #ffffff;
+  border-right: 1px solid #e5e7eb;
+  display: flex;
+  flex-direction: column;
+  padding: 0;
+  box-shadow: 0 1px 3px 0 rgba(0, 0, 0, 0.1), 0 1px 2px 0 rgba(0, 0, 0, 0.06);
+}
+
+.header {
+  padding: 24px 20px;
+  border-bottom: 1px solid #f3f4f6;
+}
+
+.logo {
+  height: 32px;
+  width: 140px;
+  border-radius: 6px;
+}
+
+.profile {
+  padding: 20px;
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  border-bottom: 1px solid #f3f4f6;
+}
+
+.avatar {
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  flex-shrink: 0;
+}
+
+.profileInfo {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.name {
+  height: 16px;
+  width: 120px;
+  border-radius: 4px;
+}
+
+.email {
+  height: 14px;
+  width: 160px;
+  border-radius: 4px;
+}
+
+.navigation {
+  flex: 1;
+  padding: 16px 0;
+  overflow-y: auto;
+}
+
+  .navigation::-webkit-scrollbar {
+    width: 4px;
+  }
+  
+  .navigation::-webkit-scrollbar-thumb {
+    background: #d4d4d4;
+    border-radius: 10px;
+  }
+.menuSection {
+  margin-bottom: 32px;
+  padding: 0 20px;
+}
+
+.sectionTitle {
+  height: 14px;
+  width: 80px;
+  border-radius: 4px;
+  margin-bottom: 16px;
+}
+
+.menuItem {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 12px 0;
+}
+
+.icon {
+  width: 20px;
+  height: 20px;
+  border-radius: 4px;
+  flex-shrink: 0;
+}
+
+.menuText {
+  height: 16px;
+  border-radius: 4px;
+  flex: 1;
+}
+
+.menuItem:nth-child(2) .menuText { width: 85%; }
+.menuItem:nth-child(3) .menuText { width: 75%; }
+.menuItem:nth-child(4) .menuText { width: 95%; }
+.menuItem:nth-child(5) .menuText { width: 80%; }
+
+.footer {
+  padding: 20px;
+  border-top: 1px solid #f3f4f6;
+  margin-top: auto;
+}
+
+/* Skeleton animation and styling */
+.skeleton {
+  background: linear-gradient(90deg, #e0e0e0 25%, #f8f8f8 50%, #e0e0e0 75%);
+  background-size: 200% 100%;
+  animation: shimmer 1.6s infinite ease-in-out;
+}
+
+@keyframes shimmer {
+  0% {
+    background-position: -200% 0;
+  }
+  100% {
+    background-position: 200% 0;
+  }
+}
+
+/* Dark mode support - commented out to keep white background */
+@media (prefers-color-scheme: dark) {
+  .sidebar {
+    /* Keep white background even in dark mode */
+    /* background-color: #1f2937;
+    border-right-color: #374151; */
+  }
+
+  .header,
+  .profile,
+  .footer {
+    /* Keep light borders even in dark mode */
+    /* border-color: #374151; */
+  }
+
+  .skeleton {
+    /* Keep the same light skeleton animation in dark mode */
+    background: linear-gradient(90deg, #e0e0e0 25%, #f8f8f8 50%, #e0e0e0 75%);
+  }
+}
+
+/* Responsive design */
+@media (max-width: 768px) {
+  .sidebar {
+    width: 100%;
+    max-width: 280px;
+  }
+}

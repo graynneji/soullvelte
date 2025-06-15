@@ -1,0 +1,652 @@
+/* Main Container */
+.container {
+  height: 100vh;
+  background: linear-gradient(135deg, var(--secondary), var(--color-white));
+  position: relative;
+  overflow: scroll;
+}
+
+/* Completed State */
+.completedContainer {
+  height: 100vh;
+  background: linear-gradient(135deg, var(--secondary), #f8fafc);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 2rem;
+}
+
+.completedCard {
+  max-width: 42rem;
+  width: 100%;
+  background: var(--color-white);
+  border-radius: 2.4rem;
+  box-shadow: var(--shadow-lg);
+  padding: 3.2rem;
+  text-align: center;
+}
+
+.completedIcon {
+  width: 8rem;
+  height: 8rem;
+  background: linear-gradient(135deg, var(--primary), var(--button-hover));
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin: 0 auto 2.4rem;
+}
+
+.completedCheckIcon {
+  width: 4rem;
+  height: 4rem;
+  color: var(--color-white);
+}
+
+.completedTitle {
+  font-size: 2.4rem;
+  font-weight: 700;
+  color: var(--primary-text-color);
+  margin-bottom: 1.6rem;
+}
+
+.completedText {
+  color: var(--secondary-text-color);
+  margin-bottom: 2.4rem;
+  line-height: 1.6;
+}
+
+.completedButton {
+  width: 100%;
+  background: linear-gradient(135deg, var(--primary), var(--button-hover));
+  color: var(--color-white);
+  font-weight: 600;
+  padding: 1.6rem 2.4rem;
+  border: none;
+  border-radius: 1.2rem;
+  transition: all 0.2s ease;
+  transform: scale(1);
+}
+
+.completedButton:hover {
+  background: linear-gradient(135deg, var(--button-hover), var(--button-active));
+  transform: scale(1.02);
+}
+
+/* Background Decoration */
+.backgroundDecoration {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+}
+
+.decorationCircle {
+  position: absolute;
+  width: 32rem;
+  height: 32rem;
+  border-radius: 50%;
+  filter: blur(4rem);
+  opacity: 0.15;
+}
+
+.decorationCircleTop {
+  top: -16rem;
+  right: -16rem;
+  background: linear-gradient(135deg, var(--primary), var(--button-hover));
+}
+
+.decorationCircleBottom {
+  bottom: -16rem;
+  left: -16rem;
+  background: linear-gradient(45deg, #3b82f6, #6366f1);
+}
+
+/* Content */
+.content {
+  position: relative;
+  z-index: 10;
+  max-width: 120rem;
+  margin: 0 auto;
+  padding: 3.2rem 2rem;
+}
+
+/* Header */
+.header {
+  text-align: center;
+  margin-bottom: 1.8rem;
+}
+
+.title {
+  font-size: clamp(2.2rem, 5vw, 3.8rem);
+  font-weight: 700;
+  background: linear-gradient(135deg, var(--primary), var(--button-hover));
+  background-clip: text;
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  margin-bottom: 1rem;
+  line-height: 1.2;
+}
+
+.subtitle {
+  font-size: 1.5rem;
+  color: var(--secondary-text-color);
+  max-width: 64rem;
+  margin: 0 auto;
+  line-height: 1.6;
+}
+
+/* Progress Section */
+.progressSection {
+  margin-bottom: 1rem;
+  margin-top: 1rem;
+  max-width: 100rem;
+  margin-left: auto;
+  margin-right: auto;
+}
+
+.progressInfo {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 0.8rem;
+}
+
+.progressLabel,
+.progressPercentage {
+  font-size: 1.4rem;
+  font-weight: 500;
+  color: var(--text-color);
+}
+
+.progressBarContainer {
+  width: 100%;
+  background: #e5e7eb;
+  border-radius: 1.2rem;
+  height: 1.2rem;
+  overflow: hidden;
+}
+
+.progressBar {
+  height: 100%;
+  background: linear-gradient(90deg, var(--primary), var(--button-hover));
+  border-radius: 1.2rem;
+  transition: width 0.5s ease;
+  position: relative;
+}
+
+.progressAnimation {
+  position: absolute;
+  inset: 0;
+  background: rgba(255, 255, 255, 0.2);
+  animation: pulse 2s ease-in-out infinite;
+}
+
+@keyframes pulse {
+  0%, 100% { opacity: 0.2; }
+  50% { opacity: 0.4; }
+}
+
+/* Question Card */
+.questionCard {
+  background: rgba(255, 255, 255, 0.85);
+  backdrop-filter: blur(16px);
+  border-radius: var(--border-radius-xxl);
+  box-shadow: var(--shadow-lg);
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  padding: clamp(2.2rem, 5vw, 3.8rem);
+  min-height: 50rem;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  max-width: 80rem;
+  margin: 0 auto;
+}
+
+/* Question Content */
+.questionContent {
+  display: flex;
+  flex-direction: column;
+  gap: 3.2rem;
+}
+
+.backButton {
+  display: flex;
+  align-items: center;
+  gap: 0.8rem;
+  color: var(--secondary-text-color);
+  background: none;
+  border: none;
+  font-size: 1.4rem;
+  transition: color 0.2s ease;
+  align-self: flex-start;
+}
+
+.backButton:hover {
+  color: var(--primary-text-color);
+}
+
+.backIcon {
+  width: 1.6rem;
+  height: 1.6rem;
+}
+
+/* Question Section */
+.questionSection {
+  text-align: center;
+  display: flex;
+  flex-direction: column;
+  gap: 1.6rem;
+}
+
+.questionTitle {
+  font-size: clamp(1.4rem, 4vw, 2.5rem);
+  font-weight: 700;
+  color: var(--primary-text-color);
+  line-height: 1.3;
+}
+
+.questionInfo {
+  display: flex;
+  font-size: clamp(1rem, 4vw, 1.5rem);
+  align-items: flex-start;
+  justify-content: center;
+  gap: 1.2rem;
+  background: rgba(78, 117, 96, 0.1);
+  padding: .8rem;
+  border-radius: var(--border-radius-xl);
+  max-width: 64rem;
+  margin: 0 auto;
+}
+
+.infoIcon {
+  width: 2rem;
+  height: 2rem;
+  color: var(--primary);
+  margin-top: 0.2rem;
+  flex-shrink: 0;
+}
+
+.questionSubtitle {
+  color: var(--primary);
+  text-align: left;
+  line-height: 1.5;
+}
+
+/* Answer Section */
+.answerSection {
+  max-width: 64rem;
+  margin: 0 auto;
+  width: 100%;
+}
+
+/* Select Input */
+.selectInput {
+  width: 100%;
+  padding: 1.6rem;
+  background: var(--color-white);
+  border: 2px solid #e5e7eb;
+  border-radius: 1.2rem;
+  color: var(--primary-text-color);
+  font-weight: 500;
+  font-size: 1.6rem;
+  transition: border-color 0.2s ease;
+}
+
+.selectInput:focus {
+  border-color: var(--primary);
+  outline: none;
+}
+
+/* Multiple Choice */
+.multipleChoiceContainer {
+  display: flex;
+  flex-direction: column;
+  gap: 1.2rem;
+}
+
+.optionButton {
+  width: 100%;
+  padding: 1.6rem;
+  border-radius: 1.2rem;
+  border: 2px solid #e5e7eb;
+  background: var(--color-white);
+  color: var(--text-color);
+  font-weight: 500;
+  font-size: 1.6rem;
+  text-align: left;
+  transition: all 0.2s ease;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.optionButton:hover {
+  border-color: rgba(78, 117, 96, 0.3);
+  background: rgba(78, 117, 96, 0.05);
+}
+
+.optionButtonSelected {
+  background: rgba(78, 117, 96, 0.1);
+  border-color: var(--primary);
+  color: var(--primary);
+}
+
+.passwordContainer {
+  position: relative;
+  margin: 2rem 0;
+}
+
+.checkIcon {
+  width: 2rem;
+  height: 2rem;
+}
+
+.continueButton {
+  width: 100%;
+  margin-top: 2.4rem;
+  background: linear-gradient(135deg, var(--primary), var(--button-hover));
+  color: var(--color-white);
+  font-weight: 600;
+  padding: 1.6rem 2.4rem;
+  border: none;
+  border-radius: 1.2rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.8rem;
+  transition: all 0.2s ease;
+  transform: scale(1);
+}
+
+.continueButton:hover {
+  background: linear-gradient(135deg, var(--button-hover), var(--button-active));
+  transform: scale(1.02);
+}
+
+/* Choice Container */
+.choiceContainer {
+  display: grid;
+  gap: 1.2rem;
+}
+
+.choiceButton {
+  width: 100%;
+  padding: 1.2rem;
+  background: var(--color-white);
+  border: 2px solid #e5e7eb;
+  border-radius: 1.2rem;
+  color: var(--text-color);
+  font-weight: 500;
+  font-size: 1.6rem;
+  text-align: left;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  transition: all 0.2s ease;
+  transform: scale(1);
+}
+
+.choiceButton:hover {
+  border-color: var(--primary);
+  background: rgba(78, 117, 96, 0.05);
+  color: var(--primary);
+  transform: scale(1.02);
+}
+
+.choiceChevron {
+  width: 2rem;
+  height: 2rem;
+  opacity: 0;
+  transition: opacity 0.2s ease;
+}
+
+.choiceButton:hover .choiceChevron {
+  opacity: 1;
+}
+
+/* Signup Content */
+.signupContent {
+  display: flex;
+  flex-direction: column;
+  gap: 3.2rem;
+}
+
+.signupHeader {
+  text-align: center;
+  display: flex;
+  flex-direction: column;
+  gap: 1.6rem;
+}
+
+.signupIcon {
+  width: 5.4rem;
+  height: 5.4rem;
+  background: linear-gradient(135deg, var(--primary), var(--button-hover));
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin: 0 auto;
+}
+
+.signupCheckIcon {
+  width: 3.2rem;
+  height: 3.2rem;
+  color: var(--color-white);
+}
+
+.signupTitle {
+  font-size: clamp(1.4rem, 4vw, 2.5rem);
+  font-weight: 700;
+  color: var(--primary-text-color);
+}
+
+.signupSubtitle {
+  color: var(--secondary-text-color);
+  line-height: 1.6;
+}
+
+/* Signup Form */
+.signupForm {
+  display: flex;
+  flex-direction: column;
+  gap: 1.4rem;
+  max-width: 48rem;
+  margin: 0 auto;
+  width: 100%;
+}
+
+.createIcon {
+  position: absolute;
+  left: 1.2rem;
+  top: 50%;
+  transform: translateY(-50%);
+  width: 2rem;
+  height: 2rem;
+  color: var(--placeholder-text);
+}
+
+/* Form Footer */
+.formFooter {
+  padding-top: 1.6rem;
+  display: flex;
+  flex-direction: column;
+  gap: 1.6rem;
+}
+
+.privacyText {
+  font-size: 1.4rem;
+  color: var(--secondary-text-color);
+  text-align: center;
+  line-height: 1.5;
+}
+
+.privacyLink {
+  color: var(--primary);
+  text-decoration: underline;
+  font-weight: 500;
+  transition: color 0.2s ease;
+}
+
+.privacyLink:hover {
+  color: var(--button-hover);
+}
+
+/* .submitButton {
+  width: 100%;
+  background: linear-gradient(135deg, var(--primary), var(--button-hover));
+  color: var(--color-white);
+  font-weight: 600;
+  padding: 1.6rem 2.4rem;
+  border: none;
+  border-radius: 1.2rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.8rem;
+  transition: all 0.2s ease;
+  transform: scale(1);
+  font-size: 1.6rem;
+}
+
+.submitButton:hover {
+  background: linear-gradient(135deg, var(--button-hover), var(--button-active));
+  transform: scale(1.02);
+} */
+
+.chevronIcon {
+  width: 2rem;
+  height: 2rem;
+}
+
+/* Responsive Design */
+@media (max-width: 768px) {
+  .content {
+    padding: 2rem 1.6rem;
+  }
+  
+  .questionCard {
+    padding: 2.4rem 2rem;
+    min-height: 45rem;
+  }
+  
+  .header {
+    margin-bottom: 3.2rem;
+  }
+  
+  .progressSection {
+    margin-bottom: 3.2rem;
+  }
+  
+  .questionContent {
+    gap: 2.4rem;
+  }
+  
+  .signupContent {
+    gap: 2.4rem;
+  }
+  
+  .questionInfo {
+    text-align: center;
+  }
+  
+  .questionSubtitle {
+    text-align: center;
+  }
+}
+
+@media (max-width: 480px) {
+  .content {
+    padding: 1.6rem 1.2rem;
+  }
+  
+  .questionCard {
+    padding: 2rem 1.6rem;
+    min-height: 40rem;
+  }
+  
+  .completedCard {
+    padding: 2.4rem 2rem;
+  }
+  
+  .completedIcon {
+    width: 6rem;
+    height: 6rem;
+  }
+  
+  .completedCheckIcon {
+    width: 3rem;
+    height: 3rem;
+  }
+  
+  .completedTitle {
+    font-size: 2rem;
+  }
+  
+  .signupIcon {
+    width: 5rem;
+    height: 5rem;
+  }
+  
+  .signupCheckIcon {
+    width: 2.4rem;
+    height: 2.4rem;
+  }
+  
+  .formInput {
+    padding: 1rem 1rem 1rem 4rem;
+    font-size: 1.4rem;
+  }
+  
+  .inputIcon {
+    width: 1.8rem;
+    height: 1.8rem;
+    left: 1rem;
+  }
+  
+  .choiceButton,
+  .optionButton {
+    padding: 1.2rem;
+    font-size: 1.4rem;
+  }
+  
+  .selectInput {
+    padding: 1.2rem;
+    font-size: 1.4rem;
+  }
+  
+  .decorationCircle {
+    width: 24rem;
+    height: 24rem;
+  }
+  
+  .decorationCircleTop {
+    top: -12rem;
+    right: -12rem;
+  }
+  
+  .decorationCircleBottom {
+    bottom: -12rem;
+    left: -12rem;
+  }
+}
+
+@media (max-width: 360px) {
+  .questionCard {
+    padding: 1.6rem 1.2rem;
+  }
+  
+  .completedCard {
+    padding: 2rem 1.6rem;
+  }
+  
+  .questionInfo {
+    flex-direction: column;
+    gap: 0.8rem;
+    text-align: center;
+  }
+  
+  .infoIcon {
+    align-self: center;
+  }
+}

@@ -1,0 +1,411 @@
+/* Backdrop */
+.backdrop {
+  position: fixed;
+  inset: 0;
+  z-index: 50;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 1rem;
+  background-color: rgba(0, 0, 0, 0);
+  backdrop-filter: blur(0px);
+  transition: all 0.3s ease;
+}
+
+.backdropVisible {
+  background-color: rgba(0, 0, 0, 0.5);
+  backdrop-filter: blur(4px);
+}
+
+/* Modal */
+.modal {
+  position: relative;
+  max-width: 28rem;
+  width: 100%;
+  background-color: var(--color-white);
+  border-radius: var(--border-radius-lg);
+  box-shadow: var(--shadow-lg);
+  border: 1px solid rgba(78, 117, 96, 0.1);
+  padding: 1.5rem;
+  text-align: center;
+  transform: translateY(2rem) scale(0.95);
+  opacity: 0;
+  transition: all 0.3s ease;
+}
+
+.modalVisible {
+  transform: translateY(0) scale(1);
+  opacity: 1;
+}
+
+/* Close Button */
+.closeButton {
+  position: absolute;
+  top: 1rem;
+  right: 1rem;
+  padding: 0.5rem;
+  border-radius: 50%;
+  background: transparent;
+  border: none;
+  cursor: pointer;
+  transition: background-color 0.2s ease;
+}
+
+.closeButton:hover {
+  background-color: rgba(78, 117, 96, 0.1);
+}
+
+.closeIcon {
+  width: 1rem;
+  height: 1rem;
+  color: var(--placeholder-text);
+  transition: color 0.2s ease;
+}
+
+.closeButton:hover .closeIcon {
+  color: var(--secondary-text-color);
+}
+
+/* Icon Container */
+.iconContainer {
+  position: relative;
+  margin-bottom: 1.5rem;
+  margin-top: 0.5rem;
+}
+
+.iconPing {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  animation: ping 2s cubic-bezier(0, 0, 0.2, 1) infinite;
+}
+
+.iconPing::after {
+  content: '';
+  width: 4rem;
+  height: 4rem;
+  border-radius: 50%;
+  opacity: 0.75;
+}
+
+.iconBackground {
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 4rem;
+  height: 4rem;
+  border-radius: 50%;
+  box-shadow: var(--shadow-md);
+  margin: 0 auto;
+}
+
+.icon {
+  width: 2rem;
+  height: 2rem;
+  color: white;
+}
+
+/* Brand Color Classes */
+.primary {
+  background: linear-gradient(135deg, var(--primary), var(--button-hover));
+}
+
+.primary .iconPing::after {
+  background-color: rgba(78, 117, 96, 0.1);
+}
+
+.success {
+  background: linear-gradient(135deg, var(--primary), var(--button-hover));
+}
+
+.success .iconPing::after {
+  background-color: rgba(78, 117, 96, 0.1);
+}
+
+.warning {
+  background: linear-gradient(135deg, #f59e0b, #d97706);
+}
+
+.warning .iconPing::after {
+  background-color: rgba(245, 158, 11, 0.1);
+}
+
+.error {
+  background: linear-gradient(135deg, #ef4444, #dc2626);
+}
+
+.error .iconPing::after {
+  background-color: rgba(239, 68, 68, 0.1);
+}
+
+/* Status Badge */
+.statusBadge {
+  margin-bottom: 1rem;
+  padding: 0.25rem 0.75rem;
+  border-radius: 9999px;
+  font-size: 0.875rem;
+  font-weight: 500;
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.online {
+  background-color: rgba(78, 117, 96, 0.1);
+  color: var(--button-active);
+}
+
+.offline {
+  background-color: rgba(239, 68, 68, 0.1);
+  color: #b91c1c;
+}
+
+.statusDot {
+  width: 0.5rem;
+  height: 0.5rem;
+  border-radius: 50%;
+  animation: pulse 2s cubic-bezier(0.4, 0, 0.6, 1) infinite;
+}
+
+.onlineDot {
+  background-color: var(--primary);
+}
+
+.offlineDot {
+  background-color: #ef4444;
+}
+
+/* Text Elements */
+.title {
+  font-size: 1.25rem;
+  font-weight: 700;
+  color: var(--primary-text-color);
+  margin-bottom: 0.5rem;
+}
+
+.subtitle {
+  color: var(--secondary-text-color);
+  font-weight: 500;
+  margin-bottom: 0.75rem;
+  font-size: 0.875rem;
+}
+
+.description {
+  color: var(--secondary-text-color);
+  font-size: 0.875rem;
+  line-height: 1.5;
+  margin-bottom: 1.5rem;
+}
+
+/* Button Section */
+.buttonSection {
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+}
+
+.retryButton {
+  width: 100%;
+  padding: 0.75rem 1.5rem;
+  border-radius: var(--border-radius-md);
+  font-weight: 600;
+  color: white;
+  border: none;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5rem;
+  transform: scale(1);
+}
+
+.retryButton:not(.disabled):hover {
+  transform: scale(1.02);
+  box-shadow: var(--shadow-md);
+}
+
+.retryButton:not(.disabled):active {
+  transform: scale(0.98);
+}
+
+.retryButton.primary:not(.disabled) {
+  background: linear-gradient(135deg, var(--primary), var(--button-hover));
+}
+
+.retryButton.primary:not(.disabled):hover {
+  background: linear-gradient(135deg, var(--button-hover), var(--button-active));
+}
+
+.retryButton.success:not(.disabled) {
+  background: linear-gradient(135deg, var(--primary), var(--button-hover));
+}
+
+.retryButton.success:not(.disabled):hover {
+  background: linear-gradient(135deg, var(--button-hover), var(--button-active));
+}
+
+.retryButton.warning:not(.disabled) {
+  background: linear-gradient(135deg, #f59e0b, #d97706);
+}
+
+.retryButton.warning:not(.disabled):hover {
+  background: linear-gradient(135deg, #d97706, #b45309);
+}
+
+.retryButton.error:not(.disabled) {
+  background: linear-gradient(135deg, #ef4444, #dc2626);
+}
+
+.retryButton.error:not(.disabled):hover {
+  background: linear-gradient(135deg, #dc2626, #b91c1c);
+}
+
+.retryButton.disabled {
+  background-color: var(--placeholder-text);
+  cursor: not-allowed;
+}
+
+.buttonIcon {
+  width: 1rem;
+  height: 1rem;
+}
+
+.spinning {
+  animation: spin 1s linear infinite;
+}
+
+.continueButton {
+  width: 100%;
+  padding: 0.5rem 1.5rem;
+  color: var(--secondary-text-color);
+  font-weight: 500;
+  background: transparent;
+  border: none;
+  cursor: pointer;
+  transition: color 0.2s ease;
+}
+
+.continueButton:hover {
+  color: var(--primary-text-color);
+}
+
+.retryInfo {
+  font-size: 0.75rem;
+  color: var(--placeholder-text);
+  margin: 0;
+}
+
+/* Reassurance Box */
+.reassuranceBox {
+  margin-top: 1.5rem;
+  padding: 0.75rem;
+  background-color: rgba(78, 117, 96, 0.05);
+  border-radius: var(--border-radius-md);
+  border: 1px solid rgba(78, 117, 96, 0.1);
+}
+
+.reassuranceContent {
+  display: flex;
+  align-items: flex-start;
+  gap: 0.75rem;
+}
+
+.reassuranceIcon {
+  width: 1rem;
+  height: 1rem;
+  color: var(--primary);
+  flex-shrink: 0;
+  margin-top: 0.125rem;
+}
+
+.reassuranceText {
+  text-align: left;
+}
+
+.reassuranceTitle {
+  font-size: 0.875rem;
+  font-weight: 500;
+  color: var(--button-active);
+  margin: 0 0 0.25rem 0;
+}
+
+.reassuranceDescription {
+  font-size: 0.75rem;
+  color: var(--button-hover);
+  margin: 0;
+}
+
+/* Help Sections */
+.offlineHelp {
+  margin-top: 0.75rem;
+  padding: 0.75rem;
+  background-color: rgba(245, 158, 11, 0.05);
+  border-radius: var(--border-radius-sm);
+  border: 1px solid rgba(245, 158, 11, 0.2);
+}
+
+.offlineText {
+  font-size: 0.75rem;
+  color: #92400e;
+  margin: 0;
+}
+
+.supportHelp {
+  margin-top: 0.75rem;
+  padding: 0.75rem;
+  background-color: rgba(107, 114, 128, 0.05);
+  border-radius: var(--border-radius-sm);
+  border: 1px solid rgba(107, 114, 128, 0.2);
+}
+
+.supportText {
+  font-size: 0.75rem;
+  color: var(--secondary-text-color);
+  margin: 0;
+}
+
+/* Animations */
+@keyframes ping {
+  75%, 100% {
+    transform: scale(2);
+    opacity: 0;
+  }
+}
+
+@keyframes pulse {
+  50% {
+    opacity: .5;
+  }
+}
+
+@keyframes spin {
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+/* Mobile Responsiveness */
+@media (max-width: 640px) {
+  .modal {
+    margin: 1rem;
+    max-width: calc(100vw - 2rem);
+  }
+  
+  .title {
+    font-size: 1.125rem;
+  }
+  
+  .iconBackground {
+    width: 3.5rem;
+    height: 3.5rem;
+  }
+  
+  .icon {
+    width: 1.75rem;
+    height: 1.75rem;
+  }
+}
