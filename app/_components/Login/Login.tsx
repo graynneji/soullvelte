@@ -1,8 +1,6 @@
 
 "use client";
-
 import React, { useState, useTransition } from 'react';
-import { useSearchParams, useRouter } from 'next/navigation';
 import styles from "./Login.module.css";
 import Input from '../Input/Input';
 import Logo from '../Logo/Logo';
@@ -36,7 +34,7 @@ const Login: React.FC = () => {
                         <h1 className={styles.title}>Welcome Back</h1>
                         <p className={styles.subtitle}>Sign in to your therapy account</p>
                         {error && (
-                            <p className={styles.error}>{decodeURIComponent(error)}</p>
+                            <p className={styles.error}>{error}</p>
                         )}
                     </div>
 

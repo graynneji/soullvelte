@@ -1,51 +1,49 @@
 "use client";
-import React, { useEffect, useState } from "react";
+import React, { useState } from "react";
 import {
-    MagnifyingGlassIcon,
     ChatTextIcon,
     UsersIcon,
-    CalendarIcon,
-    WalletIcon,
+    CaretRightIcon,
     ClockIcon,
     BookmarkIcon,
     GearSixIcon,
-    CaretRightIcon,
+    WalletIcon,
     PlusIcon,
+    MagnifyingGlassIcon,
+    ClockUserIcon,
 } from "@phosphor-icons/react/dist/ssr";
 import Link from "next/link";
-import styles from "./TherapistSideBar.module.css";
+import styles from "./TherapistSidebar.module.css";
 import { useDispatch, useSelector } from "react-redux";
-import { useRealTime } from "@/app/hooks/useRealTime";
-import { useMessPrev } from "@/app/hooks/useMessPrev";
-import { formatTime } from "@/app/utils";
-import { getPatientRecvId } from "@/app/store/getPatientRecvIdSlice";
+// import { useRealTime } from "@/app/hooks/useRealTime";
+// import { useMessPrev } from "@/app/hooks/useMessPrev";
+// import { formatTime } from "@/app/utils";
+// import { getPatientRecvId } from "@/app/store/getPatientRecvIdSlice";
 import { usePathname, useRouter } from "next/navigation";
 import PatientList from "../PatientList/PatientList";
-import { formatCurrency } from "@/app/utils";
-import { capitalizeFirstLetter } from "@/app/utils";
-import { getAllPatientsAttachedToTherapist } from "@/app/_lib/data-services";
+// import CallHistory from "../CallHistory/CallHistory";
+import { formatCurrency } from "@/app/_utils";
+import { capitalizeFirstLetter } from "@/app/_utils";
 
-// Interfaces
-interface Patient {
-    patient_id: string;
+import { Earnings, Patient, User } from "@/index";
+import { setSelectedPatientId } from "@/app/_store/selectedPatientIdSlice";
+import { usePreviousMsg } from "@/app/_hooks/usePreviousMsg";
+
+
+interface PatientListProps {
     name: string;
-    lastMessage?: string;
-    time?: string;
-    unread?: number;
-    status?: "online" | "offline";
+    patient_id: string;
+
+
 }
 
-interface Message {
-    message: string;
-    created_at: string;
-}
-
-interface PatientCardProps {
-    patient: Patient;
-    collectedMsg: Message | null;
-    onHandleClick: (info: { patientId: string; patientName: string }) => void;
+export interface PatientCardProps {
+    patient: PatientListProps;
+    collectedMsg: any;
     isActive: boolean;
+    onHandleClick: (args: { patientId: string; patientName: string }) => void;
 }
+
 
 // Navigation tabs data
 const messNav = [
@@ -53,7 +51,6 @@ const messNav = [
     { menuName: "Patients", MenuIcon: UsersIcon },
 ];
 
-// Patient card component
 const PatientCard: React.FC<PatientCardProps> = ({
     patient,
     collectedMsg,
@@ -77,7 +74,10 @@ const PatientCard: React.FC<PatientCardProps> = ({
                     <div className={styles.avatarInitial}>
                         {patient.name.charAt(0).toUpperCase()}
                     </div>
-                    <div className={`${styles.statusDot} ${styles.online}`}></div>
+                    <div
+                        className={`${styles.statusDot} ${styles.online}`}
+                    // className={`${styles.statusDot} ${styles[patient.status]}`}
+                    ></div>
                 </div>
                 <div className={styles.patientInfo}>
                     <div className={styles.patientHeader}>
@@ -85,12 +85,17 @@ const PatientCard: React.FC<PatientCardProps> = ({
                             {capitalizeFirstLetter(patient?.name)}
                         </h4>
                         <span className={styles.messageTime}>
-                            {formatTime(collectedMsg?.created_at)}
+                            {/* {formatTime(collectedMsg?.created_at)} */}
                         </span>
                     </div>
+
                     <p className={styles.lastMessage}>
-                        {collectedMsg?.message?.split(" ").slice(0, 6).join(" ")}
+                        {collectedMsg?.message?.split(" ").slice(0, 6).join(" ") ||
+                            <span className={styles.awaiting}><ClockIcon size={20} color="#90ee90" />
+                                <span>Awaiting preview message</span>
+                            </span>}
                     </p>
+
                     <div className={styles.messageFooter}>
                         <span className={styles.unreadBadge}>3</span>
                     </div>
@@ -101,52 +106,50 @@ const PatientCard: React.FC<PatientCardProps> = ({
 };
 
 interface TherapistSidebarProps {
-    users: { user_id: string }[];
-    therapistInfo: any;
+    userInfo: User;
+    therapistInfo?: Earnings;
+    therapistPatients?: Patient;
+}
+
+interface SelectedPatient {
+    patientId: string;
+    patientName: string;
 }
 
 const TherapistSidebar: React.FC<TherapistSidebarProps> = ({
-    users,
+    userInfo,
     therapistInfo,
+    therapistPatients
 }) => {
     const [activeTab, setActiveTab] = useState<number>(0);
     const [activeFilter, setActiveFilter] = useState<string>("All");
     const [searchTerm, setSearchTerm] = useState<string>("");
-    const [selectPatient, setSelectPatient] = useState<string>("");
+    const [selectPatient, setSelectPatient] = useState<SelectedPatient>();
     const dispatch = useDispatch();
     const pathname = usePathname();
     const route = useRouter();
-    const userId = users[0]?.user_id;
-    const conversations = useMessPrev(userId);
+    const userId = userInfo[0]?.user_id;
+    const conversations = usePreviousMsg(userId);
     const conversationEntries = Object.entries(conversations);
-    const messageMap = new Map<string, Message>(conversationEntries as [string, Message][]);
-    const [therapistPatients, setTherapistPatients] = useState<Patient[]>([]);
+    const messageMap = new Map<string, any>(conversationEntries);
 
-    useEffect(() => {
-        async function fetchTherpistPatients() {
-            const data = await getAllPatientsAttachedToTherapist();
-            setTherapistPatients(data || []);
-        }
-        fetchTherpistPatients();
-    }, []);
 
-    const filteredPatients = therapistPatients.filter(
-        (patient) =>
-            patient?.name?.toLowerCase().includes(searchTerm.toLowerCase())
-    );
+    const filteredPatients = therapistPatients?.filter(
+        (patient) => patient?.name?.toLowerCase().includes(searchTerm.toLowerCase())
+    ) ?? [];
 
     // Handle filter change
     const handleFilterChange = (filter: string) => {
         setActiveFilter(filter);
     };
 
-    const handleSelectPatient = ({ patientId }: { patientId: string, patientName: string }) => {
-        setSelectPatient(patientId);
-        if (pathname != "/dashboard") {
-            route.push("/dashboard");
-            dispatch(getPatientRecvId(patientId));
+    const handleSelectPatient = (selectedPatient: SelectedPatient) => {
+        setSelectPatient(selectedPatient);
+        if (pathname !== "/provider") {
+            route.push("/provider");
+            dispatch(setSelectedPatientId(selectedPatient));
         } else {
-            dispatch(getPatientRecvId(patientId));
+            dispatch(setSelectedPatientId(selectedPatient));
         }
     };
 
@@ -154,6 +157,7 @@ const TherapistSidebar: React.FC<TherapistSidebarProps> = ({
         <>
             <div className={styles.patientListContainer}>
                 <h3 className={styles.chatHeader}>Messages</h3>
+                {/* Modern search input */}
                 <div className={styles.searchContainer}>
                     <MagnifyingGlassIcon
                         size={18}
@@ -168,6 +172,7 @@ const TherapistSidebar: React.FC<TherapistSidebarProps> = ({
                         onChange={(e) => setSearchTerm(e.target.value)}
                     />
                 </div>
+                {/* Navigation tabs with animated indicator */}
                 <div className={styles.navigationTabs}>
                     {messNav.map((item, index) => (
                         <div
@@ -187,15 +192,10 @@ const TherapistSidebar: React.FC<TherapistSidebarProps> = ({
                         </div>
                     ))}
                 </div>
-                {activeTab == 1 ? (
+                {/* Filter chips */}
+                {activeTab === 1 ? (
                     <div className={styles.forPatient}>
-                        <h4
-                            style={{
-                                letterSpacing: "-0.01em",
-                            }}
-                        >
-                            Patients
-                        </h4>
+                        <h4 style={{ letterSpacing: "-0.01em" }}>Patients</h4>
                     </div>
                 ) : (
                     <div className={styles.filterChips}>
@@ -212,14 +212,12 @@ const TherapistSidebar: React.FC<TherapistSidebarProps> = ({
                     </div>
                 )}
             </div>
+
+            {/* Patient conversations with visual indicators */}
             <div className={styles.patientsList}>
                 {activeTab !== 1 && (
                     <div className={styles.patientsListHeader}>
-                        <h4
-                            style={{
-                                letterSpacing: "-0.01em",
-                            }}
-                        >
+                        <h4 style={{ letterSpacing: "-0.01em" }}>
                             Recent Conversations
                         </h4>
                         <span className={styles.viewAll}>
@@ -227,23 +225,23 @@ const TherapistSidebar: React.FC<TherapistSidebarProps> = ({
                         </span>
                     </div>
                 )}
+
+                {/* Patient cards */}
                 <div className={styles.patientCardsContainer}>
                     {filteredPatients.length > 0 ? (
                         filteredPatients.map((patient) => {
                             const collectedMsg = messageMap.get(patient.patient_id) || null;
-                            return activeTab == 1 ? (
+                            return activeTab === 1 ? (
                                 <PatientList
                                     key={patient?.patient_id}
                                     patient={patient}
-                                    isActive={patient?.patient_id == selectPatient}
-                                    filteredPatients={filteredPatients}
                                 />
                             ) : (
                                 <PatientCard
                                     key={patient?.patient_id}
                                     patient={patient}
                                     collectedMsg={collectedMsg}
-                                    isActive={patient?.patient_id == selectPatient}
+                                    isActive={selectPatient?.patientId === patient?.patient_id}
                                     onHandleClick={handleSelectPatient}
                                 />
                             );
@@ -254,12 +252,15 @@ const TherapistSidebar: React.FC<TherapistSidebarProps> = ({
                         </div>
                     )}
                 </div>
+
+                {/* Add new chat button */}
                 <div className={styles.addNewChat}>
                     <div className={styles.addIcon}>
                         <PlusIcon size={20} weight="bold" />
                     </div>
                     <span>Start New Conversation</span>
                 </div>
+
                 <h3 className={styles.chatHeader}>Earnings</h3>
                 <Link href="/dashboard/wallet">
                     <div
@@ -272,13 +273,15 @@ const TherapistSidebar: React.FC<TherapistSidebarProps> = ({
                         <div className={styles.walletInfo}>
                             <span className={styles.walletLabel}>Your Wallet</span>
                             <span className={styles.walletBalance}>
-                                {formatCurrency(therapistInfo?.therapistData[0]?.balance)}
+                                {formatCurrency(therapistInfo?.[0]?.balance ?? 0)}
                             </span>
                         </div>
                         <CaretRightIcon size={16} className={styles.walletArrow} />
                     </div>
                 </Link>
             </div>
+
+            {/* Quick actions at the bottom */}
             <div className={styles.profileDown}>
                 <div className={styles.quickActions}>
                     <Link href="/dashboard/history">

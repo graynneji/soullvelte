@@ -47,7 +47,7 @@ export async function updateSession(
   const licenseKey = process.env.LICENSE_KEY;
 
   // Make the license check API call
-  await fetch(`${process.env.NEXT_PUBLIC_SERVER}/license/get`, {
+  await fetch(`${process.env.SERVER_URL}/license/get`, {
     method: "POST",
     headers: { "Content-Type": "application/json" },
     body: JSON.stringify({ licenseKey }),

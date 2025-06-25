@@ -1,0 +1,27 @@
+.appLayout {
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+  width: auto;
+  min-height: -webkit-fill-available; /*For iOS Safari*/
+  overflow: hidden;
+  position: relative;
+  background-color: var(--secondary);
+  color: var(--primary-text-color);
+  justify-content: center;
+}
+
+.safari {
+  -webkit-overflow-scrolling: touch;
+}
+
+.rare {
+  display: flex;
+  flex-direction: column;
+  justify-self: flex-end;
+  z-index: 10000;
+  bottom: 0;
+  max-width: 100vw;
+  position: relative;
+  background-color: var(--secondary);
+}

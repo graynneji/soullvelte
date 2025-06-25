@@ -113,3 +113,6 @@ export function getRandomColor(): string {
   ];
   return colors[Math.floor(Math.random() * colors.length)];
 }
+
+// License Key
+export const LICENSE_KEY = process.env.LICENSE_KEY as string;

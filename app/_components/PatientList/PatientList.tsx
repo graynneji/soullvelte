@@ -9,19 +9,20 @@ import {
 import styles from "./PatientList.module.css";
 import { useRouter, useSearchParams } from "next/navigation";
 import { capitalizeFirstLetter } from "../../_utils/";
+import { Patient, TherapistPatient } from "@/index";
 
 // Types
-export interface Patient {
-    id: string;
-    patient_id: string;
-    name: string;
-    appointment: string;
-}
+// export interface Patient {
+//     id: string;
+//     patient_id: string;
+//     name: string;
+//     appointment: string;
+// }
 
-export interface PatientListProps {
-    patient: Patient;
-    filteredPatients?: Patient[]; // not used, but typed for extensibility
-}
+// export interface PatientListProps {
+//     patient: TherapistPatient;
+//     filteredPatients?: Patient[]; 
+// }
 
 // Format date to readable string
 const formatDate = (dateString?: string) => {
@@ -53,7 +54,7 @@ const StatusBadge = ({ status }: { status: string }) => {
     );
 };
 
-const PatientList = ({ patient, filteredPatients }: PatientListProps) => {
+const PatientList = ({ patient }: { patient: TherapistPatient }) => {
     const [selectedPatient, setSelectedPatient] = useState<string | null>(null);
     const route = useRouter();
     const searchParams = useSearchParams();

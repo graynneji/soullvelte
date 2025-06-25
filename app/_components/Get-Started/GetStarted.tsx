@@ -5,93 +5,37 @@ import { questions } from '@/app/_constants';
 import {
   ArrowLeftIcon, CheckIcon, CaretRightIcon,
   InfoIcon,
-  UserIcon,
-  EnvelopeSimpleIcon,
-  PhoneIcon,
-  LockIcon,
 } from '@phosphor-icons/react/dist/ssr';
 import styles from './GetStarted.module.css';
 import Input from '../Input/Input';
 import Button from '../Button/Button';
+import { SelectedQuesAnswersPatient } from '@/app/_lib/actions';
+import CreateForm from '../CreateForm/CreateForm';
 
-interface Question {
-  id: number;
-  section: number;
-  question: string;
-  type: 'multiple' | 'select';
-  options: string[];
-  info: string;
-}
-
-
-interface FormData {
-  firstName: string;
-  email: string;
-  phone: string;
-  password: string;
-}
-
-interface Answers {
+export interface Answers {
   [key: string]: string | string[];
 }
 
-//constants 
-type AllowedInputType = 'text' | 'email' | 'password' | 'number' | 'tel' | 'url';
-
-interface CreateInputProps {
-  id: string;
-  label: string;
-  type: AllowedInputType;
-  icon?: React.ReactNode;
-  placeholder: string;
+// Map generic answers to strict SelectedQuesAnswersPatient
+function mapAnswersToSelectedQuesAnswersPatient(answers: Answers): SelectedQuesAnswersPatient {
+  return {
+    age: (answers['age'] as string) || "",
+    gender: (answers['gender'] as string) || "",
+    issues: Array.isArray(answers['issues']) ? (answers['issues'] as string[]).join(', ') : (answers['issues'] as string) || "",
+    therapist_gender: (answers['therapist_gender'] as string) || "",
+    session_type: (answers['session_type'] as string) || "",
+    frequency: (answers['frequency'] as string) || "",
+  };
 }
 
-type CreateInputPropsArray = CreateInputProps[];
-
-const createFormInputProps: CreateInputPropsArray = [
-  {
-    id: "name",
-    label: "First Name",
-    type: "text",
-    placeholder: "Enter your first name",
-    icon: <UserIcon className={styles.createIcon} />
-  },
-  {
-    id: "email",
-    label: "Email Address",
-    type: "email",
-    placeholder: "Enter your email address",
-    icon: <EnvelopeSimpleIcon className={styles.createIcon} />
-  },
-  {
-    id: "phone",
-    label: "Phone Number",
-    type: "tel",
-    placeholder: "Enter your phone number",
-    icon: <PhoneIcon className={styles.createIcon} />
-  },
-  {
-    id: "password",
-    label: "Create Password",
-    type: "password",
-    placeholder: "Create a secure password",
-    icon: <LockIcon className={styles.createIcon} />
-  },
-];
 
 const GetStarted: React.FC = () => {
   const [currentStep, setCurrentStep] = useState<number>(0);
   const [answers, setAnswers] = useState<Answers>({});
-  const [formData, setFormData] = useState<FormData>({
-    firstName: '',
-    email: '',
-    phone: '',
-    password: ''
-  });
   const [isCompleted, setIsCompleted] = useState<boolean>(false);
   const [showPassword, setShowPassword] = useState<boolean>(false)
 
-
+  console.log(answers)
 
   const totalSteps: number = questions.length + 1; // +1 for signup form
 
@@ -122,23 +66,12 @@ const GetStarted: React.FC = () => {
     }));
   };
 
-  const handleFormSubmit = (e: React.FormEvent<HTMLFormElement>): void => {
-    e.preventDefault();
-    setIsCompleted(true);
-  };
-
   const goBack = (): void => {
     if (currentStep > 0) {
       setCurrentStep(currentStep - 1);
     }
   };
 
-  const handleFormInputChange = (field: keyof FormData, value: string): void => {
-    setFormData(prev => ({
-      ...prev,
-      [field]: value
-    }));
-  };
 
   const progressPercentage: number = ((currentStep + 1) / totalSteps) * 100;
 
@@ -201,10 +134,9 @@ const GetStarted: React.FC = () => {
             <div className={styles.questionContent}>
               {/* Back Button */}
               {currentStep > 0 && (
-                <button onClick={goBack} className={styles.backButton}>
-                  <ArrowLeftIcon className={styles.backIcon} />
+                <Button variant='text' iconPosition='left' icon={<ArrowLeftIcon className={styles.backIcon} />} onClick={goBack} className={styles.backButton}>
                   Back
-                </button>
+                </Button>
               )}
 
               {/* Question */}
@@ -223,33 +155,37 @@ const GetStarted: React.FC = () => {
               {/* Answer Options */}
               <div className={styles.answerSection}>
                 {questions[currentStep].type === 'select' ? (
-                  <select
-                    className={styles.selectInput}
+                  <Input
+                    id="select"
+                    value=""
+                    inputType="selectTherapy"
+                    options={questions[currentStep].options}
                     onChange={(e) => handleAnswer(questions[currentStep].id, e.target.value)}
-                    defaultValue=""
-                  >
-                    <option value="" disabled>Choose an option...</option>
-                    {questions[currentStep].options.map((option, idx) => (
-                      <option key={idx} value={option}>{option}</option>
-                    ))}
-                  </select>
+                  />
+
                 ) : questions[currentStep].type === 'multiple' ? (
                   <div className={styles.multipleChoiceContainer}>
                     {questions[currentStep].options.map((option, idx) => {
                       const isSelected = ((answers[questions[currentStep].id] as string[]) || []).includes(option);
                       return (
-                        <button
+                        <Button
                           key={idx}
+                          custom={true}
+                          variant='none'
+                          iconPosition='right'
+                          icon={isSelected ? <CheckIcon className={styles.checkIcon} /> : ""}
                           onClick={() => handleMultipleChoice(questions[currentStep].id, option)}
                           className={`${styles.optionButton} ${isSelected ? styles.optionButtonSelected : ''}`}
                         >
                           <span>{option}</span>
-                          {isSelected && <CheckIcon className={styles.checkIcon} />}
-                        </button>
+                        </Button>
                       );
                     })}
                     {((answers[questions[currentStep].id] as string[]) || []).length > 0 && (
-                      <button
+                      <Button
+                        size="large"
+                        iconPosition="right"
+                        icon={<CaretRightIcon className={styles.chevronIcon} />}
                         onClick={() => {
                           setTimeout(() => {
                             if (currentStep < questions.length - 1) {
@@ -262,133 +198,31 @@ const GetStarted: React.FC = () => {
                         className={styles.continueButton}
                       >
                         Continue
-                        <CaretRightIcon className={styles.chevronIcon} />
-                      </button>
+                      </Button>
                     )}
                   </div>
                 ) : (
                   <div className={styles.choiceContainer}>
                     {questions[currentStep].options.map((option, idx) => (
-                      <button
+                      <Button
+                        variant='none'
+                        custom={true}
+                        iconPosition='right'
+                        icon={<CaretRightIcon className={styles.choiceChevron} />}
                         key={idx}
                         onClick={() => handleAnswer(questions[currentStep].id, option)}
                         className={styles.choiceButton}
                       >
                         <span>{option}</span>
-                        <CaretRightIcon className={styles.choiceChevron} />
-                      </button>
+
+                      </Button>
                     ))}
                   </div>
                 )}
               </div>
             </div>
           ) : (
-            /* Signup Form */
-            <div className={styles.signupContent}>
-              <button onClick={goBack} className={styles.backButton}>
-                <ArrowLeftIcon className={styles.backIcon} />
-                Back
-              </button>
-
-              <div className={styles.signupHeader}>
-                <div className={styles.signupIcon}>
-                  <CheckIcon className={styles.signupCheckIcon} />
-                </div>
-                <h2 className={styles.signupTitle}>Perfect! Let's Create Your Account</h2>
-                <p className={styles.signupSubtitle}>
-                  You're all set! Now let's create your account to get started with your therapy journey.
-                </p>
-              </div>
-
-              <form onSubmit={handleFormSubmit} className={styles.signupForm}>
-
-                {
-                  createFormInputProps.map((item: CreateInputProps) => (
-                    <Input
-                      key={item?.id}
-                      id={item?.id}
-                      inputType='create'
-                      type={item?.type}
-                      label={item?.label}
-                      placeholder={item?.placeholder}
-                      icon={item?.icon}
-                    />
-                  ))
-                }
-                {/* <div className={styles.inputGroup}>
-                  <label className={styles.inputLabel}>First Name</label>
-                  <div className={styles.inputContainer}>
-                    <UserIcon className={styles.inputIcon} />
-                    <input
-                      type="text"
-                      required
-                      value={formData.firstName}
-                      onChange={(e) => handleFormInputChange('firstName', e.target.value)}
-                      className={styles.formInput}
-                      placeholder="Enter your first name"
-                    />
-                  </div>
-                </div>
-
-                <div className={styles.inputGroup}>
-                  <label className={styles.inputLabel}>Email Address</label>
-                  <div className={styles.inputContainer}>
-                    <EnvelopeSimpleIcon className={styles.inputIcon} />
-                    <input
-                      type="email"
-                      required
-                      value={formData.email}
-                      onChange={(e) => handleFormInputChange('email', e.target.value)}
-                      className={styles.formInput}
-                      placeholder="Enter your email address"
-                    />
-                  </div>
-                </div>
-
-                <div className={styles.inputGroup}>
-                  <label className={styles.inputLabel}>Phone Number</label>
-                  <div className={styles.inputContainer}>
-                    <PhoneIcon className={styles.inputIcon} />
-                    <input
-                      type="tel"
-                      required
-                      value={formData.phone}
-                      onChange={(e) => handleFormInputChange('phone', e.target.value)}
-                      className={styles.formInput}
-                      placeholder="Enter your phone number"
-                    />
-                  </div>
-                </div>
-
-                <div className={styles.inputGroup}>
-                  <label className={styles.inputLabel}>Create Password</label>
-                  <div className={styles.inputContainer}>
-                    <LockIcon className={styles.inputIcon} />
-                    <input
-                      type="password"
-                      required
-                      value={formData.password}
-                      onChange={(e) => handleFormInputChange('password', e.target.value)}
-                      className={styles.formInput}
-                      placeholder="Create a secure password"
-                    />
-                  </div>
-                </div> */}
-
-                <div className={styles.formFooter}>
-                  <p className={styles.privacyText}>
-                    By continuing you agree with BetterSpace{' '}
-                    <a href="#" className={styles.privacyLink}>
-                      Privacy Policy
-                    </a>
-                  </p>
-                  <Button type="submit" size="large" iconPosition="right" icon={<CaretRightIcon />} className={styles.submitButton}>
-                    Create Account
-                    {/* <CaretRightIcon className={styles.chevronIcon} /> */}
-                  </Button>
-                </div>
-              </form>
-            </div>
+            <CreateForm goBack={goBack} answers={mapAnswersToSelectedQuesAnswersPatient(answers)} />
           )}
         </div>
       </div>

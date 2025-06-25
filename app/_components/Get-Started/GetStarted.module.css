@@ -279,24 +279,6 @@
   width: 100%;
 }
 
-/* Select Input */
-.selectInput {
-  width: 100%;
-  padding: 1.6rem;
-  background: var(--color-white);
-  border: 2px solid #e5e7eb;
-  border-radius: 1.2rem;
-  color: var(--primary-text-color);
-  font-weight: 500;
-  font-size: 1.6rem;
-  transition: border-color 0.2s ease;
-}
-
-.selectInput:focus {
-  border-color: var(--primary);
-  outline: none;
-}
-
 /* Multiple Choice */
 .multipleChoiceContainer {
   display: flex;
@@ -306,13 +288,12 @@
 
 .optionButton {
   width: 100%;
-  padding: 1.6rem;
+  padding: 1.2rem;
   border-radius: 1.2rem;
   border: 2px solid #e5e7eb;
   background: var(--color-white);
   color: var(--text-color);
   font-weight: 500;
-  font-size: 1.6rem;
   text-align: left;
   transition: all 0.2s ease;
   display: flex;
@@ -377,7 +358,6 @@
   border-radius: 1.2rem;
   color: var(--text-color);
   font-weight: 500;
-  font-size: 1.6rem;
   text-align: left;
   display: flex;
   align-items: center;
@@ -404,93 +384,8 @@
   opacity: 1;
 }
 
-/* Signup Content */
-.signupContent {
-  display: flex;
-  flex-direction: column;
-  gap: 3.2rem;
-}
 
-.signupHeader {
-  text-align: center;
-  display: flex;
-  flex-direction: column;
-  gap: 1.6rem;
-}
 
-.signupIcon {
-  width: 5.4rem;
-  height: 5.4rem;
-  background: linear-gradient(135deg, var(--primary), var(--button-hover));
-  border-radius: 50%;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  margin: 0 auto;
-}
-
-.signupCheckIcon {
-  width: 3.2rem;
-  height: 3.2rem;
-  color: var(--color-white);
-}
-
-.signupTitle {
-  font-size: clamp(1.4rem, 4vw, 2.5rem);
-  font-weight: 700;
-  color: var(--primary-text-color);
-}
-
-.signupSubtitle {
-  color: var(--secondary-text-color);
-  line-height: 1.6;
-}
-
-/* Signup Form */
-.signupForm {
-  display: flex;
-  flex-direction: column;
-  gap: 1.4rem;
-  max-width: 48rem;
-  margin: 0 auto;
-  width: 100%;
-}
-
-.createIcon {
-  position: absolute;
-  left: 1.2rem;
-  top: 50%;
-  transform: translateY(-50%);
-  width: 2rem;
-  height: 2rem;
-  color: var(--placeholder-text);
-}
-
-/* Form Footer */
-.formFooter {
-  padding-top: 1.6rem;
-  display: flex;
-  flex-direction: column;
-  gap: 1.6rem;
-}
-
-.privacyText {
-  font-size: 1.4rem;
-  color: var(--secondary-text-color);
-  text-align: center;
-  line-height: 1.5;
-}
-
-.privacyLink {
-  color: var(--primary);
-  text-decoration: underline;
-  font-weight: 500;
-  transition: color 0.2s ease;
-}
-
-.privacyLink:hover {
-  color: var(--button-hover);
-}
 
 /* .submitButton {
   width: 100%;
@@ -542,10 +437,6 @@
     gap: 2.4rem;
   }
   
-  .signupContent {
-    gap: 2.4rem;
-  }
-  
   .questionInfo {
     text-align: center;
   }
@@ -581,16 +472,6 @@
   
   .completedTitle {
     font-size: 2rem;
-  }
-  
-  .signupIcon {
-    width: 5rem;
-    height: 5rem;
-  }
-  
-  .signupCheckIcon {
-    width: 2.4rem;
-    height: 2.4rem;
   }
   
   .formInput {

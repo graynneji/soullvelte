@@ -7,5 +7,4 @@ export const supabase: SupabaseClient = createClient(supabaseUrl, supabaseKey, {
   auth: {
     autoRefreshToken: true,
   },
-  // auth: { persistSession: false, autoRefreshToken: true },
 });

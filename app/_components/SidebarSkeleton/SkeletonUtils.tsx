@@ -1,6 +1,13 @@
+import React from "react";
 import styles from "./SidebarSkeleton.module.css";
 
-export const SkeletonBlock = ({
+interface SkeletonBlockProps {
+  height?: string | number;
+  width?: string | number;
+  borderRadius?: string | number;
+}
+
+export const SkeletonBlock: React.FC<SkeletonBlockProps> = ({
   height = "20px",
   width = "100%",
   borderRadius = "4px",

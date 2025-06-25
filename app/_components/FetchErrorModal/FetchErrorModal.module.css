@@ -20,7 +20,7 @@
 /* Modal */
 .modal {
   position: relative;
-  max-width: 28rem;
+  max-width: clamp(40rem, 4vw, 32rem);
   width: 100%;
   background-color: var(--color-white);
   border-radius: var(--border-radius-lg);
@@ -56,8 +56,8 @@
 }
 
 .closeIcon {
-  width: 1rem;
-  height: 1rem;
+  width: 1.5rem;
+  height: 1.5rem;
   color: var(--placeholder-text);
   transition: color 0.2s ease;
 }
@@ -146,7 +146,7 @@
   margin-bottom: 1rem;
   padding: 0.25rem 0.75rem;
   border-radius: 9999px;
-  font-size: 0.875rem;
+  font-size: 1.2rem;
   font-weight: 500;
   display: inline-flex;
   align-items: center;
@@ -164,8 +164,8 @@
 }
 
 .statusDot {
-  width: 0.5rem;
-  height: 0.5rem;
+  width: 1rem;
+  height: 1rem;
   border-radius: 50%;
   animation: pulse 2s cubic-bezier(0.4, 0, 0.6, 1) infinite;
 }
@@ -180,22 +180,22 @@
 
 /* Text Elements */
 .title {
-  font-size: 1.25rem;
+  font-size: 1.5rem;
   font-weight: 700;
   color: var(--primary-text-color);
   margin-bottom: 0.5rem;
 }
 
 .subtitle {
-  color: var(--secondary-text-color);
+  color: var(--primary-text-color);
   font-weight: 500;
   margin-bottom: 0.75rem;
-  font-size: 0.875rem;
+  font-size: 1.2rem;
 }
 
 .description {
   color: var(--secondary-text-color);
-  font-size: 0.875rem;
+  font-size: 1.2rem;
   line-height: 1.5;
   margin-bottom: 1.5rem;
 }
@@ -223,6 +223,8 @@
   transform: scale(1);
 }
 
+/* Retry color changes */
+
 .retryButton:not(.disabled):hover {
   transform: scale(1.02);
   box-shadow: var(--shadow-md);
@@ -233,19 +235,19 @@
 }
 
 .retryButton.primary:not(.disabled) {
-  background: linear-gradient(135deg, var(--primary), var(--button-hover));
+  background: linear-gradient(135deg, #3b82f6, #2563eb);
 }
 
 .retryButton.primary:not(.disabled):hover {
-  background: linear-gradient(135deg, var(--button-hover), var(--button-active));
+  background: linear-gradient(135deg, #2563eb, #1d4ed8);
 }
 
 .retryButton.success:not(.disabled) {
-  background: linear-gradient(135deg, var(--primary), var(--button-hover));
+  background: linear-gradient(135deg, #10b981, #059669);
 }
 
 .retryButton.success:not(.disabled):hover {
-  background: linear-gradient(135deg, var(--button-hover), var(--button-active));
+  background: linear-gradient(135deg, #059669, #047857);
 }
 
 .retryButton.warning:not(.disabled) {
@@ -270,8 +272,8 @@
 }
 
 .buttonIcon {
-  width: 1rem;
-  height: 1rem;
+  width: 2rem;
+  height: 2rem;
 }
 
 .spinning {
@@ -294,7 +296,7 @@
 }
 
 .retryInfo {
-  font-size: 0.75rem;
+  font-size: 1rem;
   color: var(--placeholder-text);
   margin: 0;
 }
@@ -315,8 +317,8 @@
 }
 
 .reassuranceIcon {
-  width: 1rem;
-  height: 1rem;
+  width: 2rem;
+  height: 2rem;
   color: var(--primary);
   flex-shrink: 0;
   margin-top: 0.125rem;
@@ -327,14 +329,14 @@
 }
 
 .reassuranceTitle {
-  font-size: 0.875rem;
+  font-size: 1.2rem;
   font-weight: 500;
   color: var(--button-active);
   margin: 0 0 0.25rem 0;
 }
 
 .reassuranceDescription {
-  font-size: 0.75rem;
+  font-size: 1rem;
   color: var(--button-hover);
   margin: 0;
 }
@@ -349,7 +351,7 @@
 }
 
 .offlineText {
-  font-size: 0.75rem;
+  font-size: 1rem;
   color: #92400e;
   margin: 0;
 }
@@ -363,7 +365,7 @@
 }
 
 .supportText {
-  font-size: 0.75rem;
+  font-size: 1rem;
   color: var(--secondary-text-color);
   margin: 0;
 }

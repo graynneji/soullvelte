@@ -4,6 +4,7 @@ const nextConfig: NextConfig = {
   /* config options here */
 
   webpack(config) {
+    config.module.exprContextCritical = false;
     config.module.rules.push({
       test: /\.svg$/,
       use: ["@svgr/webpack"],

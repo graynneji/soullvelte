@@ -70,7 +70,7 @@ const FetchErrorModal: React.FC<FetchErrorModalProps> = ({
                 window.removeEventListener('offline', handleOffline);
             };
         }
-    }, [showOfflineDetection, autoClose, onClose]);
+    }, [showOfflineDetection, autoClose, onClose, navigator.onLine]);
 
     const getContextualMessage = (): ContextualMessage => {
         const messages: Record<ContextType, ContextualMessage> = {
@@ -79,28 +79,28 @@ const FetchErrorModal: React.FC<FetchErrorModalProps> = ({
                 subtitle: "We're having trouble connecting to your therapy session",
                 description: "Your privacy and session continuity are important to us. This temporary connection issue won't affect your progress or data.",
                 icon: HeartStraightIcon,
-                colorClass: styles.emerald,
+                colorClass: styles.success,
             },
             appointment: {
                 title: "Appointment Data Unavailable",
                 subtitle: "We couldn't load your appointment information",
                 description: "Your scheduled sessions are safe. This is just a temporary connection issue that we're working to resolve.",
                 icon: WarningCircleIcon,
-                colorClass: styles.blue,
+                colorClass: styles.primary,
             },
             profile: {
                 title: "Profile Sync Issue",
                 subtitle: "We're having trouble accessing your profile",
                 description: "Your personal information and progress remain secure. We're working to restore the connection.",
                 icon: ShieldIcon,
-                colorClass: styles.purple,
+                colorClass: styles.warning,
             },
             general: {
                 title: "Connection Issue",
                 subtitle: "We're having trouble connecting to our servers",
                 description: "This is temporary and your data remains safe and secure. Our team is working to restore full functionality.",
                 icon: WifiHighIcon,
-                colorClass: styles.indigo,
+                colorClass: styles.primary,
             }
         };
         return messages[context] || messages.general;

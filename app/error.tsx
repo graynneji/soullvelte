@@ -9,7 +9,7 @@ export default function Error({ error, reset }: { error: Error; reset: () => voi
 
   useEffect(() => {
     // Show the error modal whenever a global error occurs
-    showError('general', {
+    showError('session', {
       onRetry: async () => reset(), // Try to recover by resetting the error boundary
       showCloseButton: false,
     });

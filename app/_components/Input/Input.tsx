@@ -1,4 +1,4 @@
-import React, { ChangeEvent, TextareaHTMLAttributes, InputHTMLAttributes, SelectHTMLAttributes, Fragment } from 'react';
+import React, { ChangeEvent, Fragment } from 'react';
 import styles from './Input.module.css';
 
 // Define all possible input types
@@ -12,7 +12,8 @@ export type InputType =
     | 'select'
     | 'search'
     | 'addnote'
-    | 'transparentInput';
+    | 'transparentInput'
+    | 'message';
 
 // Define chat context types
 export type ChatContext = 'chat' | null;
@@ -44,6 +45,13 @@ interface TextareaInputProps extends BaseInputProps {
     maxLength?: number;
 }
 
+interface TextareaMessageProps extends BaseInputProps {
+    inputType: 'textarea' | 'message';
+    rows?: number;
+    value?: string;
+    maxLength?: number;
+}
+
 interface LoginInputProps extends BaseInputProps {
     inputType: 'login';
     type?: 'text' | 'email' | 'password' | 'number' | 'tel' | 'url';
@@ -63,7 +71,8 @@ interface CreateInputProps extends BaseInputProps {
 
 interface SelectInputProps extends BaseInputProps {
     inputType: 'selectTherapy';
-    options?: Array<{ value: string; label: string }>;
+    // options?: Array<{ value: string; label: string }>;
+    options?: string[]
     value?: string;
 }
 
@@ -92,7 +101,8 @@ export type InputProps =
     | SelectInputProps
     | SelectOptionProps
     | SearchInputProps
-    | TransparentInputProps;
+    | TransparentInputProps
+    | TextareaMessageProps;
 
 const Input: React.FC<InputProps> = (props) => {
     const {
@@ -182,26 +192,16 @@ const Input: React.FC<InputProps> = (props) => {
                             {label}
                         </label>
                         <select
-                            className={styles.styledInput}
-                            style={{ backgroundColor: 'white' }}
-                            name={id}
-                            id={id}
-                            disabled={disabled}
+                            className={styles.selectInput}
                             value={(props as SelectInputProps).value}
                             onChange={onHandleChange || onChange}
                         >
-                            {(props as SelectInputProps).options ? (
+                            <option value="" disabled>Choose an option...</option>
+                            {
                                 (props as SelectInputProps).options!.map((option, index) => (
-                                    <option key={index} value={option.value}>
-                                        {option.label}
-                                    </option>
+                                    <option key={index} value={option}>{option}</option>
                                 ))
-                            ) : (
-                                <Fragment>
-                                    <option value="male">Male</option>
-                                    <option value="female">Female</option>
-                                </Fragment>
-                            )}
+                            }
                         </select>
                     </Fragment>
                 )}
@@ -228,6 +228,21 @@ const Input: React.FC<InputProps> = (props) => {
                     </Fragment>
                 )}
             </div>
+
+            {/* Send message input  */}
+            {
+                inputType === "message" && (
+                    <textarea
+                        id={id}
+                        name={id}
+                        placeholder={placeholder}
+                        className={styles.messageTextarea}
+                        value={(props as TextareaMessageProps).value}
+                        rows={(props as TextareaMessageProps).rows || 1}
+                        onChange={onHandleChange || onChange}
+                    />
+                )
+            }
 
             {/* Login Input with Floating Label */}
             {inputType === 'login' && (
@@ -261,6 +276,7 @@ const Input: React.FC<InputProps> = (props) => {
                         {(props as CreateInputProps).icon}
                         <input
                             id={id}
+                            name={id}
                             type={(props as CreateInputProps).type || 'text'}
                             required
                             className={styles.createInput}
@@ -272,9 +288,17 @@ const Input: React.FC<InputProps> = (props) => {
 
             {/* Select Option (Single Option) */}
             {inputType === 'select' && (
-                <option value={(props as SelectOptionProps).option}>
-                    {(props as SelectOptionProps).option}
-                </option>
+
+                <select
+                    className={styles.selectInput}
+                    onChange={onHandleChange || onChange}
+                    defaultValue=""
+                >
+                    <option value={(props as SelectOptionProps).option}>
+                        {(props as SelectOptionProps).option}
+                    </option>
+                </select>
+
             )}
 
             {/* Search Input */}

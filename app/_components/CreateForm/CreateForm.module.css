@@ -1,0 +1,136 @@
+/* Signup Content */
+.signupContent {
+  display: flex;
+  flex-direction: column;
+  gap: 3.2rem;
+}
+
+.signupHeader {
+  text-align: center;
+  display: flex;
+  flex-direction: column;
+  gap: 1.6rem;
+}
+
+.signupIcon {
+  width: 5.4rem;
+  height: 5.4rem;
+  background: linear-gradient(135deg, var(--primary), var(--button-hover));
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin: 0 auto;
+}
+
+.signupCheckIcon {
+  width: 3.2rem;
+  height: 3.2rem;
+  color: var(--color-white);
+}
+
+.signupTitle {
+  font-size: clamp(1.4rem, 4vw, 2.5rem);
+  font-weight: 700;
+  color: var(--primary-text-color);
+}
+
+.signupSubtitle {
+  color: var(--secondary-text-color);
+  line-height: 1.6;
+}
+
+.backButton {
+  display: flex;
+  align-items: center;
+  gap: 0.8rem;
+  color: var(--secondary-text-color);
+  background: none;
+  border: none;
+  font-size: 1.4rem;
+  transition: color 0.2s ease;
+  align-self: flex-start;
+}
+
+.backButton:hover {
+  color: var(--primary-text-color);
+}
+
+.backIcon {
+  width: 1.6rem;
+  height: 1.6rem;
+}
+.error {
+  color: red;
+}
+
+/* Signup Form */
+.signupForm {
+  display: flex;
+  flex-direction: column;
+  gap: 1.4rem;
+  max-width: 48rem;
+  margin: 0 auto;
+  width: 100%;
+}
+
+.createIcon {
+  position: absolute;
+  left: 1.2rem;
+  top: 50%;
+  transform: translateY(-50%);
+  width: 2rem;
+  height: 2rem;
+  color: var(--placeholder-text);
+}
+
+.chevronIcon {
+  width: 2rem;
+  height: 2rem;
+}
+
+/* Form Footer */
+.formFooter {
+  padding-top: 1.6rem;
+  display: flex;
+  flex-direction: column;
+  gap: 1.6rem;
+}
+
+.privacyText {
+  font-size: 1.4rem;
+  color: var(--secondary-text-color);
+  text-align: center;
+  line-height: 1.5;
+}
+
+.privacyLink {
+  color: var(--primary);
+  text-decoration: underline;
+  font-weight: 500;
+  transition: color 0.2s ease;
+}
+
+.privacyLink:hover {
+  color: var(--button-hover);
+}
+
+@media (max-width: 768px) {
+
+  .signupContent {
+    gap: 2.4rem;
+  }
+
+}
+
+@media (max-width: 480px) {
+  .signupIcon {
+    width: 5rem;
+    height: 5rem;
+  }
+  
+  .signupCheckIcon {
+    width: 2.4rem;
+    height: 2.4rem;
+  }
+}

@@ -1,0 +1,15 @@
+.appLayout {
+  display: flex;
+  max-height: 100dvh;
+  overflow: hidden;
+  background-color: var(--secondary);
+  position: relative;
+}
+
+.children {
+  flex-grow: 1;
+}
+
+.safari {
+  -webkit-overflow-scrolling: touch;
+}

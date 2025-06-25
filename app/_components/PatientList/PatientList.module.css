@@ -1,0 +1,175 @@
+.listContainer {
+  flex: 1;
+  /* overflow-y: auto; */
+}
+
+.emptyMessage {
+  padding: 16px;
+  text-align: center;
+  color: var(--secondary-text-color);
+}
+
+.patientList {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  border: 1px solid var(--secondary);
+  border-radius: 12px;
+}
+
+.activePatient {
+  border: 1px solid var(--primary);
+  border-radius: 12px;
+}
+
+.patientItem {
+  cursor: pointer;
+  transition: background-color 0.2s;
+}
+
+.patientItem:hover {
+  background-color: var(--secondary);
+  border-radius: 12px;
+}
+
+.selectedPatient {
+  background-color: var(--secondary);
+  border-radius: 12px;
+}
+
+.patientCard {
+  padding: 16px;
+  font-size: 14px;
+}
+
+.patientHeader {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  margin-bottom: 8px;
+}
+
+.patientNameContainer {
+  display: flex;
+  align-items: center;
+}
+
+.patientIcon {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background-color: var(--secondary);
+  color: #2563eb;
+  padding: 8px;
+  border-radius: 50%;
+  margin-right: 12px;
+}
+
+.patientName {
+  font-weight: 500;
+  color: var(--primary-text-color);
+  margin: 0;
+}
+
+.chevron {
+  color: var(--placeholder-text);
+  transition: transform 0.2s;
+}
+
+.chevronRotated {
+  transform: rotate(90deg);
+}
+
+/* Appointment Info Styles */
+.appointmentInfo {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  font-size: 14px;
+}
+
+.appointmentDetail {
+  display: flex;
+  /* align-items: center; */
+  flex-direction: column;
+  color: var(--secondary-text-color);
+}
+
+.appointmentDate {
+  display: flex;
+  gap: 5px;
+  align-items: center;
+}
+
+.appointmentIcon {
+  color: var(--placeholder-text);
+  margin-right: 8px;
+}
+
+/* Status Badge Styles */
+.statusBadge {
+  display: inline-block;
+  font-size: 12px;
+  font-weight: 500;
+  padding: 4px 8px;
+  border-radius: 9999px;
+}
+
+.statusDefault {
+  background-color: #f3f4f6;
+  color: #4b5563;
+}
+
+.statusConfirmed {
+  background-color: #d1fae5;
+  color: #065f46;
+}
+
+.statusRescheduling {
+  background-color: #fef3c7;
+  color: #92400e;
+}
+
+.statusCanceled {
+  background-color: #fee2e2;
+  color: #b91c1c;
+}
+
+/* Expanded Details Styles */
+.expandedDetails {
+  margin-top: 12px;
+  padding-top: 12px;
+  border-top: 1px solid #e5e7eb;
+  font-size: 14px;
+  color: #4b5563;
+}
+
+.detailSection {
+  margin-bottom: 8px;
+}
+
+.detailLabel {
+  font-weight: 500;
+  display: block;
+  margin-bottom: 4px;
+}
+
+.detailContent {
+  margin-left: 16px;
+}
+
+.viewProfileButton {
+  margin-top: 12px;
+  background: none;
+  border: none;
+  color: #2563eb;
+  font-weight: 500;
+  font-size: 14px;
+  padding: 0;
+  cursor: pointer;
+  transition: color 0.2s;
+}
+
+.viewProfileButton:hover {
+  color: #1d4ed8;
+}

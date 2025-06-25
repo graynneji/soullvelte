@@ -6,6 +6,7 @@ const Button: React.FC<ButtonProps> = ({
     children,
     variant = 'primary',
     size = 'medium',
+    custom = false,
     fullWidth = false,
     loading = false,
     icon,
@@ -24,7 +25,7 @@ const Button: React.FC<ButtonProps> = ({
 
     return (
         <button
-            className={buttonClasses}
+            className={!custom ? buttonClasses : className}
             disabled={loading || props.disabled}
             {...props}
         >
