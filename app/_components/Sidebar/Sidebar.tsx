@@ -4,7 +4,6 @@ import Link from "next/link";
 import Image from "next/image";
 import React, { useState } from "react";
 // import { signOut } from "@/app/_lib/actions";
-import { useDispatch, useSelector } from "react-redux";
 import { RiSidebarFoldFill, RiSidebarUnfoldFill } from "react-icons/ri";
 import SidebarSkeleton from "../SidebarSkeleton/SidebarSkeleton";
 import { Earnings, Patient, User } from "@/index";
@@ -58,8 +57,8 @@ const SideBar: React.FC<SideBarProps> = ({ userInfo, therapistInfo, therapistPat
             <div className={styles.sideBarHeader}>
                 <Link href="/" className={styles.logoLink}>
                     <Image
-                        width={100}
-                        height={0}
+                        width={107}
+                        height={20}
                         src="./logo.svg"
                         alt="Logo"
                         className={styles.logo}

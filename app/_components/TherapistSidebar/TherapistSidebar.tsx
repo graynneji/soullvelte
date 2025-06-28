@@ -11,20 +11,15 @@ import {
     PlusIcon,
     MagnifyingGlassIcon,
     ClockUserIcon,
+    LockSimpleIcon,
 } from "@phosphor-icons/react/dist/ssr";
 import Link from "next/link";
 import styles from "./TherapistSidebar.module.css";
-import { useDispatch, useSelector } from "react-redux";
-// import { useRealTime } from "@/app/hooks/useRealTime";
-// import { useMessPrev } from "@/app/hooks/useMessPrev";
-// import { formatTime } from "@/app/utils";
-// import { getPatientRecvId } from "@/app/store/getPatientRecvIdSlice";
+import { useDispatch } from "react-redux";
 import { usePathname, useRouter } from "next/navigation";
 import PatientList from "../PatientList/PatientList";
-// import CallHistory from "../CallHistory/CallHistory";
 import { formatCurrency } from "@/app/_utils";
 import { capitalizeFirstLetter } from "@/app/_utils";
-
 import { Earnings, Patient, User } from "@/index";
 import { setSelectedPatientId } from "@/app/_store/selectedPatientIdSlice";
 import { usePreviousMsg } from "@/app/_hooks/usePreviousMsg";
@@ -60,7 +55,7 @@ const PatientCard: React.FC<PatientCardProps> = ({
     const pathname = usePathname();
     return (
         <div
-            className={`${styles.patientCard} ${isActive && pathname == "/dashboard" ? styles.activePatient : ""
+            className={`${styles.patientCard} ${isActive && pathname == "/provider" ? styles.activePatient : ""
                 }`}
             onClick={() =>
                 onHandleClick({
@@ -156,6 +151,25 @@ const TherapistSidebar: React.FC<TherapistSidebarProps> = ({
     return (
         <>
             <div className={styles.patientListContainer}>
+                <h3 className={styles.chatHeader}>Earnings</h3>
+                <Link href="/dashboard/wallet">
+                    <div
+                        className={`${styles.walletShortcut} ${pathname == "#" ? styles.activeWallet : ""
+                            }`}
+                    >
+                        <div className={styles.walletIcon}>
+                            <WalletIcon size={20} weight="bold" />
+                        </div>
+                        <div className={styles.walletInfo}>
+                            <span className={styles.walletLabel}>Your Wallet</span>
+                            <span className={styles.walletBalance}>
+                                {formatCurrency(therapistInfo?.[0]?.balance ?? 0)}
+                            </span>
+                        </div>
+                        <CaretRightIcon size={16} className={styles.walletArrow} />
+                        <LockSimpleIcon weight="fill" size={16} className={styles.walletArrow} />
+                    </div>
+                </Link>
                 <h3 className={styles.chatHeader}>Messages</h3>
                 {/* Modern search input */}
                 <div className={styles.searchContainer}>
@@ -260,25 +274,6 @@ const TherapistSidebar: React.FC<TherapistSidebarProps> = ({
                     </div>
                     <span>Start New Conversation</span>
                 </div>
-
-                <h3 className={styles.chatHeader}>Earnings</h3>
-                <Link href="/dashboard/wallet">
-                    <div
-                        className={`${styles.walletShortcut} ${pathname == "/dashboard/wallet" ? styles.activeWallet : ""
-                            }`}
-                    >
-                        <div className={styles.walletIcon}>
-                            <WalletIcon size={20} weight="bold" />
-                        </div>
-                        <div className={styles.walletInfo}>
-                            <span className={styles.walletLabel}>Your Wallet</span>
-                            <span className={styles.walletBalance}>
-                                {formatCurrency(therapistInfo?.[0]?.balance ?? 0)}
-                            </span>
-                        </div>
-                        <CaretRightIcon size={16} className={styles.walletArrow} />
-                    </div>
-                </Link>
             </div>
 
             {/* Quick actions at the bottom */}

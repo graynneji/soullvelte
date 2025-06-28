@@ -76,7 +76,7 @@ const Nav: React.FC<NavProps> = ({ userInfo }) => {
                             {receiverName?.charAt(0).toUpperCase()}
                         </div>
                         <div
-                        // className={`${styles.statusDot} ${styles[patient.status]}`}
+                            className={`${styles.statusDot} `}
                         ></div>
                     </div>
                 ) : (
@@ -111,17 +111,17 @@ const Nav: React.FC<NavProps> = ({ userInfo }) => {
 
             <div className={styles.actionButtons}>
                 <button
-                    onClick={() => callUser()}
                     className={`${styles.callButton} ${styles.videoCall}`}
                     aria-label="Start video call"
+                    title="Not available in LTE version"
                 >
                     <VideoCameraIcon size={20} weight="fill" />
                 </button>
 
                 <button
-                    onClick={() => callUser("audio")}
                     className={`${styles.callButton} ${styles.audioCall}`}
                     aria-label="Start audio call"
+                    title="Not available in LTE version"
                 >
                     <PhoneIcon size={20} weight="fill" />
                 </button>

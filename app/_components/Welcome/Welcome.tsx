@@ -1,16 +1,12 @@
 import React, { useTransition } from "react";
-import Image from "next/image";
 import {
     UserPlusIcon,
     CalendarIcon,
     ChatsIcon,
     ArrowRightIcon,
 } from "@phosphor-icons/react/dist/ssr";
-import Logo from "@/public/Company Logo.svg";
 import styles from "./Welcome.module.css";
 import { signOut } from "@/app/_lib/actions";
-import { useSelector } from "react-redux";
-import { SelectedPatientIdState } from "@/app/_store/selectedPatientIdSlice";
 import { User } from "@/index";
 
 type WelcomeProps = { userInfo: User };

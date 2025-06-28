@@ -6,10 +6,6 @@ import SideBar from "@/app/_components/Sidebar/Sidebar";
 import { Earnings, Patient, User } from "@/index";
 import { fetchTherapistInfo, fetchTherapistPatients, fetchUser } from "@/app/_lib/services";
 import UserProvider from "@/app/_provider/UserProvider";
-import IncomingCallModal from "@/app/_components/IncomingCallModal/IncomingCallModal";
-import Stream from "@/app/_components/Stream/Stream";
-// import IncomingCallModal from "../_components/IncomingCallModal.js/IncomingCallModal";
-// import Stream from "../_components/Stream/Stream";
 
 // Optionally, define types for data if available
 // Example:
@@ -51,8 +47,6 @@ export default async function ProviderLayout({ children }: DashboardLayoutProps)
         <main style={{ flexGrow: 1 }}>
           {children}
         </main>
-        <IncomingCallModal userInfo={userInfo} />
-        <Stream userInfo={userInfo} />
       </div>
     </UserProvider>
   );

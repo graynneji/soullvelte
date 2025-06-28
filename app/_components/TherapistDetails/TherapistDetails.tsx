@@ -1,10 +1,12 @@
 import { usePathname, useSearchParams } from "next/navigation";
 import styles from "./TherapistDetails.module.css";
 import React, { useState, useTransition } from "react";
-import { BrainIcon, CalendarCheckIcon, CertificateIcon, ChatsIcon, ChatTeardropTextIcon, DotsThreeOutlineIcon, PhoneCallIcon, SealCheckIcon, SignOutIcon, UserCircleIcon, UsersThreeIcon, VideoCameraIcon } from "@phosphor-icons/react/dist/ssr";
+import { BrainIcon, CalendarCheckIcon, CertificateIcon, ChatsIcon, ChatTeardropTextIcon, DotsThreeOutlineIcon, LockSimpleIcon, PhoneCallIcon, SealCheckIcon, SignOutIcon, UserCircleIcon, UsersThreeIcon, VideoCameraIcon } from "@phosphor-icons/react/dist/ssr";
 import Link from "next/link";
 import Menu from "../Menu/Menu";
 import Image from "next/image";
+import { signOut } from "@/app/_lib/actions";
+import { clearCachedUser } from "@/app/_lib/services";
 // Type definitions
 interface Therapist {
     name: string;
@@ -26,18 +28,18 @@ interface RenderTherapistDetailsProps {
 
 const TherapistDetails: React.FC<RenderTherapistDetailsProps> = ({ userInfo }) => {
     const [isPending, startTransition] = useTransition();
-    const [isOpen, setIsOpen] = useState(false);
     const searchParams = useSearchParams();
     const pathname = usePathname();
     const queryString = searchParams.toString();
     const currentUrl = queryString ? `${pathname}?${queryString}` : pathname;
     const repCurrentUrl = currentUrl.replace("+", " ");
     const handleSignout = () => {
-        // startTransition(() => signOut());
+        startTransition(async () => {
+            await clearCachedUser()
+            await signOut();
+        });
     };
-    const handleOpenClose = () => {
-        setIsOpen((prev) => !prev);
-    };
+
 
     const therapist = {
         isVerified: true,
@@ -60,12 +62,14 @@ const TherapistDetails: React.FC<RenderTherapistDetailsProps> = ({ userInfo }) =
         {
             title: "CareFlow AI",
             Icon: BrainIcon,
-            url: `/session/careflow-ai/${userInfo[0]?.user_id}`,
+            url: `#`,
+            locked: true,
         },
         {
             title: "Community",
             Icon: UsersThreeIcon,
-            url: `/session/community?userID=${userInfo[0]?.user_id}&author=${userInfo[0]?.name}`,
+            url: `#`,
+            locked: true,
         },
     ];
 
@@ -175,6 +179,7 @@ const TherapistDetails: React.FC<RenderTherapistDetailsProps> = ({ userInfo }) =
                         >
                             <menu.Icon size={24} />
                             {menu?.title}
+                            {menu.locked && <LockSimpleIcon weight="fill" size={16} />}
                         </button>
                     </Link>
                 ))}
@@ -193,9 +198,11 @@ const TherapistDetails: React.FC<RenderTherapistDetailsProps> = ({ userInfo }) =
                 </div>
 
                 <div className={styles.utilityActions}>
-                    <button className={styles.utilityButton} onClick={handleOpenClose} type="button">
+                    <button className={styles.utilityButton} type="button">
                         <DotsThreeOutlineIcon size={20} weight="bold" />
                         More Options
+                        {" "}
+                        <LockSimpleIcon size={16} weight="fill" />
                     </button>
 
                     <button className={styles.logoutButton} onClick={handleSignout} type="button">
@@ -203,9 +210,7 @@ const TherapistDetails: React.FC<RenderTherapistDetailsProps> = ({ userInfo }) =
                         {isPending ? "Logging out..." : "Logout"}
                     </button>
 
-                    {isOpen && (
-                        <Menu isOpen={isOpen} handleOpenClose={handleOpenClose} />
-                    )}
+
                 </div>
             </div>
         </div>

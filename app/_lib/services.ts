@@ -216,85 +216,52 @@ export async function sendMessage(
 /**
  * Fetches all appointments for a patient with a therapist.
  *
- * @param patientId - The patient's unique ID.
+ * @param userId - The patient's unique ID.
  * @param therapistId - The therapist's unique ID.
  * @param licenseKey - The license key for authentication.
  * @returns ApiResponse containing appointments or error message.
  */
 export async function fetchAppointments(
-  patientId: string,
-  therapistId: string,
-  licenseKey: string
+  userId: string,
+  therapistId: string
 ): Promise<ApiResponse<any>> {
-  return fetchApi("/user/appointments", {
-    method: "POST",
-    headers: { "Content-Type": "application/json" },
-    body: JSON.stringify({ patientId, therapistId, licenseKey }),
-  });
+  const params = new URLSearchParams({ userId, therapistId });
+  return fetchApi(`/appointment?${params.toString()}`, options);
 }
 
 /**
- * Fetches the questionaire for a patient.
+ * Fetches all appointments for a patient with a therapist.
  *
- * @param patientId - The patient's unique ID.
+ * @param userId - The patient's unique ID.
+ * @param therapistId - The therapist's unique ID.
  * @param licenseKey - The license key for authentication.
- * @returns ApiResponse containing questionaire or error message.
+ * @returns ApiResponse containing appointments or error message.
  */
-export async function fetchQuestionaire(
-  patientId: string,
-  licenseKey: string
+export async function scheduleAppointments(
+  {
+    userId,
+    therapistId,
+    color,
+  }: { userId: string; therapistId: string; color: string },
+  formData: FormData
 ): Promise<ApiResponse<any>> {
-  return fetchApi("/user/questionaire", {
+  const title = formData.get("title");
+  const start = formData.get("start");
+  const event = {
+    title,
+    start,
+    backgroundColor: color,
+    borderColor: color,
+    patient_id: userId,
+    therapist_id: therapistId,
+  };
+  return fetchApi("/appointment", {
     method: "POST",
-    headers: { "Content-Type": "application/json" },
-    body: JSON.stringify({ patientId, licenseKey }),
-  });
-}
-
-/**
- * Updates the notes for a patient.
- * Uses FormData for compatibility with file uploads or rich text.
- *
- * @param patientId - The patient's unique ID.
- * @param licenseKey - The license key for authentication.
- * @param note - The text of the note.
- * @param color - The color associated with the note.
- * @returns ApiResponse containing updated notes or error message.
- */
-export async function updateViewNotes(
-  patientId: string,
-  licenseKey: string,
-  note: string,
-  color: string
-): Promise<ApiResponse<any>> {
-  const formData = new FormData();
-  formData.append("note", note);
-  formData.append("color", color);
-  formData.append("patientId", patientId);
-  formData.append("licenseKey", licenseKey);
-
-  return fetchApi("/user/note/update", {
-    method: "POST",
-    body: formData,
-    // Do not set Content-Type for FormData
-  });
-}
-
-/**
- * Fetches all notes for a patient.
- *
- * @param patientId - The patient's unique ID.
- * @param licenseKey - The license key for authentication.
- * @returns ApiResponse containing notes or error message.
- */
-export async function fetchNotes(
-  patientId: string,
-  licenseKey: string
-): Promise<ApiResponse<any>> {
-  return fetchApi("/user/note", {
-    method: "POST",
-    headers: { "Content-Type": "application/json" },
-    body: JSON.stringify({ patientId, licenseKey }),
+    headers: {
+      "Content-Type": "application/json",
+      "soullve-license-key": LICENSE_KEY,
+    },
+    body: JSON.stringify(event),
   });
 }
 
@@ -329,46 +296,4 @@ export async function fetchUserPairMessages(
   });
 
   return fetchApi(`/user/messages/pair?${params.toString()}`, options);
-}
-
-/**
- * Parameters for creating an appointment.
- */
-export interface CreateAppointmentParams {
-  userId: string;
-  therapistId: string;
-  color: string;
-  licenseKey: string;
-  title: string;
-  start: string;
-}
-
-/**
- * Schedules an appointment for a patient with a therapist.
- * Uses FormData to support complex payloads.
- *
- * @param params - Appointment creation parameters.
- * @returns ApiResponse with appointment info or error message.
- */
-export async function createAppointment({
-  userId,
-  therapistId,
-  color,
-  licenseKey,
-  title,
-  start,
-}: CreateAppointmentParams): Promise<ApiResponse<any>> {
-  const formData = new FormData();
-  formData.append("userId", userId);
-  formData.append("therapistId", therapistId);
-  formData.append("color", color);
-  formData.append("licenseKey", licenseKey);
-  formData.append("title", title);
-  formData.append("start", start);
-
-  return fetchApi("/user/appointments/create", {
-    method: "POST",
-    body: formData,
-    // Do not set Content-Type for FormData
-  });
 }
