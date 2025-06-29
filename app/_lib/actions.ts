@@ -14,58 +14,63 @@ import { clearCachedUser } from "./services";
  * @param {FormData} formData - The form data containing email, password, and domain.
  * @returns {Promise<string | void>} Returns void if redirected, or an error message string on failure.
  */
-export const login = async (formData: FormData): Promise<string | void> => {
-  // Extract credentials and domain from the form data
-  const email = formData.get("email") as string;
-  const password = formData.get("password") as string;
-  const domain = formData.get("domain") as string;
-  const licenseKey = process.env.LICENSE_KEY as string;
-  if (!email || !password) {
-    throw new Error(ErrorMessages.default);
-  }
-
-  // Validate form fields using schema
-  const validatedFields = loginSchema.safeParse({ email, password });
-  if (!validatedFields.success) {
-    const message = "Invalid inputs, please check your inputs";
-    return message;
-  }
-
-  // Authenticate with the backend server using license key
-  const res: Response = await fetch(`${process.env.SERVER_URL}/auth`, {
-    method: "POST",
-    credentials: "include",
-    headers: { "Content-Type": "application/json" },
-    body: JSON.stringify({ licenseKey }),
-  });
-
-  if (!res.ok) throw new Error(ErrorMessages.default);
-
-  // Sign in with Supabase Auth
-  const supabase = await createClient();
-
-  const { data, error } = await supabase.auth.signInWithPassword({
-    email,
-    password,
-  });
-
-  // Determine user role (therapist or patient)
-  const designation: boolean =
-    data?.user?.user_metadata?.designation === "therapist";
-
-  if (!error) {
-    const redirectUrl: string = designation ? "/provider" : "/session";
-
-    // Revalidate cache and redirect
-    revalidatePath("/", "layout");
-    redirect(redirectUrl);
-  } else {
-    // Return specific error message if available
-    let message = ErrorMessages.default as string;
-    if (error?.code && error.code in ErrorMessages) {
-      message = ErrorMessages[error.code as ErrorCode];
+export const login = async (formData: FormData): Promise<string | {}> => {
+  try {
+    // Extract credentials and domain from the form data
+    const email = formData.get("email") as string;
+    const password = formData.get("password") as string;
+    const domain = formData.get("domain") as string;
+    const licenseKey = process.env.LICENSE_KEY as string;
+    if (!email || !password) {
+      return { error: ErrorMessages.default };
     }
-    return message;
+
+    // Validate form fields using schema
+    const validatedFields = loginSchema.safeParse({ email, password });
+    if (!validatedFields.success) {
+      const message = "Invalid inputs, please check your inputs";
+      return { error: message };
+    }
+
+    // Authenticate with the backend server using license key
+    const res: Response = await fetch(`${process.env.SERVER_URL}/auth`, {
+      method: "POST",
+      credentials: "include",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ licenseKey }),
+    });
+
+    if (!res.ok) return { error: ErrorMessages.default };
+
+    // Sign in with Supabase Auth
+    const supabase = await createClient();
+
+    const { data, error } = await supabase.auth.signInWithPassword({
+      email,
+      password,
+    });
+
+    // Determine user role (therapist or patient)
+    const designation: boolean =
+      data?.user?.user_metadata?.designation === "therapist";
+
+    if (!error) {
+      // const redirectUrl: string = designation ? "/provider" : "/session";
+
+      // Revalidate cache and redirect
+      // revalidatePath("/", "layout");
+      // redirect(redirectUrl);
+      return { redirectUrl: designation ? "/provider" : "/session" };
+    } else {
+      // Return specific error message if available
+      let message = ErrorMessages.default as string;
+      if (error?.code && error.code in ErrorMessages) {
+        message = ErrorMessages[error.code as ErrorCode];
+      }
+      return { error: message };
+    }
+  } catch (err) {
+    return { error: "Network error. Please try again later." };
   }
 };
 
@@ -126,185 +131,193 @@ function isPatientAnswers(
 export async function signup(
   selectedQuesAnswers: SelectedQuesAnswers,
   formData: FormData
-): Promise<string | void> {
-  // Get location info from GeoPlugin API
-  const response = await fetch("http://www.geoplugin.net/json.gp");
-  const location: GeoPluginLocation = await response.json();
-  const domain = formData.get("domain") as string;
-  const licenseKey = process.env.LICENSE_KEY as string;
+): Promise<string | {}> {
+  try {
+    // Get location info from GeoPlugin API
+    const response = await fetch("http://www.geoplugin.net/json.gp");
+    const location: GeoPluginLocation = await response.json();
+    const domain = formData.get("domain") as string;
+    const licenseKey = process.env.LICENSE_KEY as string;
 
-  // Validate form fields using schema
-  const validatedFields = signUpschema.safeParse({
-    email: formData.get("email"),
-    password: formData.get("password"),
-    name: formData.get("name"),
-    phone: formData.get("phone"),
-  });
+    // Validate form fields using schema
+    const validatedFields = signUpschema.safeParse({
+      email: formData.get("email"),
+      password: formData.get("password"),
+      name: formData.get("name"),
+      phone: formData.get("phone"),
+    });
 
-  if (!validatedFields.success) {
-    return ErrorMessages.invalid_inputs ?? ErrorMessages.default;
-  }
+    if (!validatedFields.success) {
+      return { error: ErrorMessages.invalid_inputs };
+    }
+    // Authenticate with the backend server using license key
+    const res: Response = await fetch(`${process.env.SERVER_URL}/auth`, {
+      method: "POST",
+      credentials: "include",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ licenseKey }),
+    });
 
-  // Authenticate with the backend server using license key
-  const res: Response = await fetch(`${process.env.SERVER_URL}/auth`, {
-    method: "POST",
-    credentials: "include",
-    headers: { "Content-Type": "application/json" },
-    body: JSON.stringify({ licenseKey }),
-  });
+    if (!res.ok) return { error: ErrorMessages.default };
+    // Register with Supabase Auth
+    const supabase = await createClient();
 
-  if (!res.ok) throw new Error(ErrorMessages.default);
-
-  // Register with Supabase Auth
-  const supabase = await createClient();
-
-  const { data: signUpData, error } = await supabase.auth.signUp({
-    email: formData.get("email") as string,
-    password: formData.get("password") as string,
-    options: {
-      data: {
-        full_name: formData.get("name"),
-        designation: isPatientAnswers(selectedQuesAnswers)
-          ? "patient"
-          : selectedQuesAnswers,
+    const { data: signUpData, error } = await supabase.auth.signUp({
+      email: formData.get("email") as string,
+      password: formData.get("password") as string,
+      options: {
+        data: {
+          full_name: formData.get("name"),
+          designation: isPatientAnswers(selectedQuesAnswers)
+            ? "patient"
+            : selectedQuesAnswers,
+        },
       },
-    },
-  });
+    });
 
-  if (error || !signUpData.user) {
-    let message = ErrorMessages.default as string;
-    if (error?.code && error.code in ErrorMessages) {
-      message = ErrorMessages[error.code as ErrorCode];
-    }
-    return message;
-  }
-
-  let therapistId: number | null = null;
-
-  // ----- PATIENT SIGNUP LOGIC -----
-  if (isPatientAnswers(selectedQuesAnswers)) {
-    // Therapist gender preference mapping
-    const genderMap: Record<string, string> = {
-      "Male therapist": "male",
-      "Female therapist": "female",
-      "Non-binary therapist": "non-binary",
-      "No preference": "",
-    };
-    const preferredGender =
-      genderMap[selectedQuesAnswers.therapist_gender] || "";
-
-    let selectedTherapist = null;
-
-    // Try to find a matching therapist by preferred gender
-    if (preferredGender) {
-      const { data: matchingTherapists } = await supabase
-        .from("therapist")
-        .select("id")
-        .eq("gender", preferredGender);
-
-      if (matchingTherapists && matchingTherapists.length > 0) {
-        const randomIndex = Math.floor(
-          Math.random() * matchingTherapists.length
-        );
-        selectedTherapist = matchingTherapists[randomIndex];
+    if (error || !signUpData.user) {
+      let message = ErrorMessages.default as string;
+      if (error?.code && error.code in ErrorMessages) {
+        message = ErrorMessages[error.code as ErrorCode];
       }
+      return { error: message };
     }
 
-    // Fallback: pick any available therapist if no match found
-    if (!selectedTherapist) {
-      const { data: allTherapists } = await supabase
-        .from("therapist")
-        .select("id");
-      if (allTherapists && allTherapists.length > 0) {
-        const randomIndex = Math.floor(Math.random() * allTherapists.length);
-        selectedTherapist = allTherapists[randomIndex];
+    let therapistId: number | null = null;
+
+    // ----- PATIENT SIGNUP LOGIC -----
+    if (isPatientAnswers(selectedQuesAnswers)) {
+      // Therapist gender preference mapping
+      const genderMap: Record<string, string> = {
+        "Male therapist": "male",
+        "Female therapist": "female",
+        "Non-binary therapist": "non-binary",
+        "No preference": "",
+      };
+      const preferredGender =
+        genderMap[selectedQuesAnswers.therapist_gender] || "";
+
+      let selectedTherapist = null;
+
+      // Try to find a matching therapist by preferred gender
+      if (preferredGender) {
+        const { data: matchingTherapists } = await supabase
+          .from("therapist")
+          .select("id")
+          .eq("gender", preferredGender);
+
+        if (matchingTherapists && matchingTherapists.length > 0) {
+          const randomIndex = Math.floor(
+            Math.random() * matchingTherapists.length
+          );
+          selectedTherapist = matchingTherapists[randomIndex];
+        }
       }
+
+      // Fallback: pick any available therapist if no match found
+      if (!selectedTherapist) {
+        const { data: allTherapists } = await supabase
+          .from("therapist")
+          .select("id");
+        if (allTherapists && allTherapists.length > 0) {
+          const randomIndex = Math.floor(Math.random() * allTherapists.length);
+          selectedTherapist = allTherapists[randomIndex];
+        }
+      }
+
+      therapistId = selectedTherapist?.id ?? null;
+
+      // Save patient user info in "user" table
+      const userData = {
+        user_id: signUpData.user.id,
+        name: formData.get("name"),
+        phone: formData.get("phone"),
+        email: formData.get("email"),
+        therapist_id: therapistId,
+        ip: location.geoplugin_request,
+        city: location.geoplugin_city,
+        region: location.geoplugin_region,
+        country: location.geoplugin_countryName,
+      };
+      const { error: InsertError } = await supabase
+        .from("user")
+        .insert([userData])
+        .select();
+
+      if (InsertError) {
+        let message =
+          InsertError.code && InsertError.code in ErrorMessages
+            ? ErrorMessages[InsertError.code as ErrorCode]
+            : ErrorMessages.default;
+        return { error: message };
+      }
+
+      // Save patient details in "patients" table
+      const patientsData = {
+        patient_id: signUpData.user.id,
+        therapist: therapistId,
+        name: formData.get("name"),
+        email: formData.get("email"),
+        selected: JSON.stringify(selectedQuesAnswers),
+      };
+      await supabase.from("patients").insert([patientsData]);
+    } else {
+      // ----- THERAPIST SIGNUP LOGIC -----
+      // Save therapist user info in "user" table, no therapist_id
+      const userData = {
+        user_id: signUpData.user.id,
+        name: formData.get("name"),
+        phone: formData.get("phone"),
+        email: formData.get("email"),
+        therapist_id: null,
+        ip: location.geoplugin_request,
+        city: location.geoplugin_city,
+        region: location.geoplugin_region,
+        country: location.geoplugin_countryName,
+      };
+      const { error: InsertError } = await supabase
+        .from("user")
+        .insert([userData])
+        .select();
+
+      if (InsertError) {
+        let message =
+          InsertError.code && InsertError.code in ErrorMessages
+            ? ErrorMessages[InsertError.code as ErrorCode]
+            : ErrorMessages.default;
+        return { error: message };
+      }
+
+      // Save therapist details in "therapist" table
+      const therapistData = {
+        therapist_id: signUpData.user.id,
+        name: formData.get("name"),
+        email: formData.get("email"),
+        license: formData.get("license"),
+        authority: formData.get("authority"),
+        gender: formData.get("gender"),
+        dob: formData.get("dob"),
+        specialization: formData.get("specialization"),
+      };
+      await supabase.from("therapist").insert([therapistData]);
     }
 
-    therapistId = selectedTherapist?.id ?? null;
+    // Revalidate and redirect to verification page
+    // revalidatePath("/", "layout");
+    // redirect(
+    //   `/verify?email=${formData.get("email")}&type=${
+    //     isPatientAnswers(selectedQuesAnswers) ? "patient" : selectedQuesAnswers
+    //   }`
+    // );
 
-    // Save patient user info in "user" table
-    const userData = {
-      user_id: signUpData.user.id,
-      name: formData.get("name"),
-      phone: formData.get("phone"),
-      email: formData.get("email"),
-      therapist_id: therapistId,
-      ip: location.geoplugin_request,
-      city: location.geoplugin_city,
-      region: location.geoplugin_region,
-      country: location.geoplugin_countryName,
+    return {
+      redirectUrl: `/verify?email=${formData.get("email")}&type=${
+        isPatientAnswers(selectedQuesAnswers) ? "patient" : selectedQuesAnswers
+      }`,
     };
-    const { error: InsertError } = await supabase
-      .from("user")
-      .insert([userData])
-      .select();
-
-    if (InsertError) {
-      let message =
-        InsertError.code && InsertError.code in ErrorMessages
-          ? ErrorMessages[InsertError.code as ErrorCode]
-          : ErrorMessages.default;
-      return message;
-    }
-
-    // Save patient details in "patients" table
-    const patientsData = {
-      patient_id: signUpData.user.id,
-      therapist: therapistId,
-      name: formData.get("name"),
-      email: formData.get("email"),
-      selected: JSON.stringify(selectedQuesAnswers),
-    };
-    await supabase.from("patients").insert([patientsData]);
-  } else {
-    // ----- THERAPIST SIGNUP LOGIC -----
-    // Save therapist user info in "user" table, no therapist_id
-    const userData = {
-      user_id: signUpData.user.id,
-      name: formData.get("name"),
-      phone: formData.get("phone"),
-      email: formData.get("email"),
-      therapist_id: null,
-      ip: location.geoplugin_request,
-      city: location.geoplugin_city,
-      region: location.geoplugin_region,
-      country: location.geoplugin_countryName,
-    };
-    const { error: InsertError } = await supabase
-      .from("user")
-      .insert([userData])
-      .select();
-
-    if (InsertError) {
-      let message =
-        InsertError.code && InsertError.code in ErrorMessages
-          ? ErrorMessages[InsertError.code as ErrorCode]
-          : ErrorMessages.default;
-      return message;
-    }
-
-    // Save therapist details in "therapist" table
-    const therapistData = {
-      therapist_id: signUpData.user.id,
-      name: formData.get("name"),
-      email: formData.get("email"),
-      license: formData.get("license"),
-      authority: formData.get("authority"),
-      gender: formData.get("gender"),
-      dob: formData.get("dob"),
-      specialization: formData.get("specialization"),
-    };
-    await supabase.from("therapist").insert([therapistData]);
+  } catch (err) {
+    return { error: "Network error. Please try again later." };
   }
-
-  // Revalidate and redirect to verification page
-  revalidatePath("/", "layout");
-  redirect(
-    `/verify?email${formData.get("email")}&type=${
-      isPatientAnswers(selectedQuesAnswers) ? "patient" : selectedQuesAnswers
-    }`
-  );
 }
 
 /**

@@ -7,6 +7,8 @@ import Logo from '../Logo/Logo';
 import Button from '../Button/Button';
 import Link from 'next/link';
 import { login } from '@/app/_lib/actions';
+import { useRouter } from 'next/navigation';
+
 
 export interface LoginFormData {
     email: string;
@@ -14,7 +16,6 @@ export interface LoginFormData {
 }
 
 export interface LoginResponse {
-    success: boolean;
     redirectUrl?: string;
     error?: string;
 }
@@ -23,6 +24,7 @@ const Login: React.FC = () => {
     const [error, setError] = useState<string>("")
     const [showPassword, setShowPassword] = useState<boolean>(false)
     const [isPending, startTransition] = useTransition();
+    const route = useRouter();
 
 
     return (
@@ -41,12 +43,16 @@ const Login: React.FC = () => {
                     <form
                         action={async (formData: FormData) => {
                             startTransition(async () => {
+                                setError("")
                                 try {
-                                    setError("")
-                                    const error = await login(formData);
-                                    if (error) setError(error)
+                                    const result = await login(formData) as LoginResponse;
+                                    if (result.error) {
+                                        setError(result.error);
+                                        return;
+                                    }
+                                    route.push(result.redirectUrl || "/");
                                 } catch (err) {
-                                    setError("Internal server error")
+                                    setError("An error occurred. Please try again later.")
                                 }
                             });
                         }}

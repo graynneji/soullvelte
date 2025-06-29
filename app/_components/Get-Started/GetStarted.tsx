@@ -35,8 +35,6 @@ const GetStarted: React.FC = () => {
   const [isCompleted, setIsCompleted] = useState<boolean>(false);
   const [showPassword, setShowPassword] = useState<boolean>(false)
 
-  console.log(answers)
-
   const totalSteps: number = questions.length + 1; // +1 for signup form
 
   const handleAnswer = (questionId: string, answer: string): void => {

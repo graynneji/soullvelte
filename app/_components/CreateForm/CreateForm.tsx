@@ -4,6 +4,8 @@ import Button from '../Button/Button'
 import { ArrowLeftIcon, CaretRightIcon, CheckIcon, EnvelopeSimpleIcon, LockIcon, PhoneIcon, UserIcon } from '@phosphor-icons/react/dist/ssr'
 import Input, { CreateInputProps } from '../Input/Input'
 import { SelectedQuesAnswers, signup } from '@/app/_lib/actions'
+import { LoginResponse } from '../Login/Login'
+import { useRouter } from 'next/navigation'
 
 
 interface createFormProps {
@@ -11,16 +13,6 @@ interface createFormProps {
     answers: SelectedQuesAnswers
 }
 
-//constants 
-type AllowedInputType = 'text' | 'email' | 'password' | 'number' | 'tel' | 'url';
-
-// interface CreateInputProps {
-//     id: string;
-//     label: string;
-//     type: AllowedInputType;
-//     icon?: React.ReactNode;
-//     placeholder: string;
-// }
 
 // type CreateInputPropsArray = CreateInputProps[];
 type CreateInputPropsArray = CreateInputProps[];
@@ -64,6 +56,7 @@ function CreateForm({ goBack, answers }: createFormProps) {
     const [isPending, startTransition] = useTransition()
     const createAccount = signup.bind(null, answers)
     const [error, setError] = useState("")
+    const route = useRouter()
     return (
         /* Signup Form */
         <div className={styles.signupContent}>
@@ -86,12 +79,16 @@ function CreateForm({ goBack, answers }: createFormProps) {
 
             <form action={async (formData: FormData) => {
                 startTransition(async () => {
+                    setError("")
                     try {
-                        setError("")
-                        const error = await createAccount(formData)
-                        if (error) setError(error)
-                    } catch (error) {
-                        setError("Internal server error")
+                        const result = await createAccount(formData) as LoginResponse
+                        if (result.error) {
+                            setError(result.error);
+                            return;
+                        }
+                        route.push(result.redirectUrl || "/get-started");
+                    } catch (err) {
+                        setError("An error occurred. Please try again later.")
                     }
 
                 })
