@@ -2,7 +2,7 @@ import React, { useState, useTransition } from 'react'
 import styles from "./CreateForm.module.css"
 import Button from '../Button/Button'
 import { ArrowLeftIcon, CaretRightIcon, CheckIcon, EnvelopeSimpleIcon, LockIcon, PhoneIcon, UserIcon } from '@phosphor-icons/react/dist/ssr'
-import Input from '../Input/Input'
+import Input, { CreateInputProps } from '../Input/Input'
 import { SelectedQuesAnswers, signup } from '@/app/_lib/actions'
 
 
@@ -14,19 +14,21 @@ interface createFormProps {
 //constants 
 type AllowedInputType = 'text' | 'email' | 'password' | 'number' | 'tel' | 'url';
 
-interface CreateInputProps {
-    id: string;
-    label: string;
-    type: AllowedInputType;
-    icon?: React.ReactNode;
-    placeholder: string;
-}
+// interface CreateInputProps {
+//     id: string;
+//     label: string;
+//     type: AllowedInputType;
+//     icon?: React.ReactNode;
+//     placeholder: string;
+// }
 
+// type CreateInputPropsArray = CreateInputProps[];
 type CreateInputPropsArray = CreateInputProps[];
 
 const createFormInputProps: CreateInputPropsArray = [
     {
         id: "name",
+        inputType: "create",
         label: "First Name",
         type: "text",
         placeholder: "Enter your first name",
@@ -34,6 +36,7 @@ const createFormInputProps: CreateInputPropsArray = [
     },
     {
         id: "email",
+        inputType: "create",
         label: "Email Address",
         type: "email",
         placeholder: "Enter your email address",
@@ -41,6 +44,7 @@ const createFormInputProps: CreateInputPropsArray = [
     },
     {
         id: "phone",
+        inputType: "create",
         label: "Phone Number",
         type: "tel",
         placeholder: "Enter your phone number",
@@ -48,6 +52,7 @@ const createFormInputProps: CreateInputPropsArray = [
     },
     {
         id: "password",
+        inputType: "create",
         label: "Create Password",
         type: "password",
         placeholder: "Create a secure password",

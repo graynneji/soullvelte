@@ -34,7 +34,7 @@ interface BaseInputProps {
 // Props specific to different input types
 interface TextInputProps extends BaseInputProps {
     inputType: 'text' | 'join';
-    type?: 'text' | 'email' | 'password' | 'number' | 'tel' | 'url';
+    type?: 'text' | 'email' | 'password' | 'number' | 'tel' | 'url' | 'date';
     value?: string;
 }
 
@@ -54,15 +54,15 @@ interface TextareaMessageProps extends BaseInputProps {
 
 interface LoginInputProps extends BaseInputProps {
     inputType: 'login';
-    type?: 'text' | 'email' | 'password' | 'number' | 'tel' | 'url';
+    type?: 'text' | 'email' | 'password' | 'number' | 'tel' | 'url' | 'date';
     selectedQuesAnswers?: string;
     required?: boolean;
     value?: string;
     defaultValue?: string
 }
-interface CreateInputProps extends BaseInputProps {
+export interface CreateInputProps extends BaseInputProps {
     inputType: 'create';
-    type?: 'text' | 'email' | 'password' | 'number' | 'tel' | 'url';
+    type?: 'text' | 'email' | 'password' | 'number' | 'tel' | 'url' | 'date';
     selectedQuesAnswers?: string;
     required?: boolean;
     value?: string;
@@ -159,75 +159,72 @@ const Input: React.FC<InputProps> = (props) => {
         );
     }
 
-    // Container for most input types
-    const containerClass = chat === 'chat' ? styles.inputLabel : styles.inputLabel1;
 
     return (
         <>
-            <div className={containerClass}>
-                {/* Text Input */}
-                {inputType === 'text' && (
-                    <Fragment>
-                        <label htmlFor={id} className={styles.label}>
-                            {label}
-                        </label>
-                        <input
-                            id={id}
-                            type={(props as TextInputProps).type || 'text'}
-                            disabled={disabled}
-                            placeholder={placeholder}
-                            className={styles.styledInput}
-                            name={id}
-                            autoComplete="off"
-                            value={(props as TextInputProps).value}
-                            onChange={onHandleChange || onChange}
-                        />
-                    </Fragment>
-                )}
+            {/* Text Input */}
+            {inputType === 'text' && (
+                <Fragment>
+                    <label htmlFor={id} className={styles.label}>
+                        {label}
+                    </label>
+                    <input
+                        id={id}
+                        type={(props as TextInputProps).type || 'text'}
+                        disabled={disabled}
+                        placeholder={placeholder}
+                        className={styles.styledInput}
+                        name={id}
+                        autoComplete="off"
+                        value={(props as TextInputProps).value}
+                        onChange={onHandleChange || onChange}
+                    />
+                </Fragment>
+            )}
 
-                {/* Select for Therapy */}
-                {inputType === 'selectTherapy' && (
-                    <Fragment>
-                        <label htmlFor={id} className={styles.label}>
-                            {label}
-                        </label>
-                        <select
-                            className={styles.selectInput}
-                            value={(props as SelectInputProps).value}
-                            onChange={onHandleChange || onChange}
-                        >
-                            <option value="" disabled>Choose an option...</option>
-                            {
-                                (props as SelectInputProps).options!.map((option, index) => (
-                                    <option key={index} value={option}>{option}</option>
-                                ))
-                            }
-                        </select>
-                    </Fragment>
-                )}
+            {/* Select for Therapy */}
+            {inputType === 'selectTherapy' && (
+                <Fragment>
+                    <label htmlFor={id} className={styles.label}>
+                        {label}
+                    </label>
+                    <select
+                        className={styles.selectInput}
+                        value={(props as SelectInputProps).value}
+                        onChange={onHandleChange || onChange}
+                    >
+                        <option value="" disabled>Choose an option...</option>
+                        {
+                            (props as SelectInputProps).options!.map((option, index) => (
+                                <option key={index} value={option}>{option}</option>
+                            ))
+                        }
+                    </select>
+                </Fragment>
+            )}
 
-                {/* Textarea */}
-                {inputType === 'textarea' && (
-                    <Fragment>
-                        <label htmlFor={id} className={styles.label}>
-                            {label}
-                        </label>
-                        <textarea
-                            id={id}
-                            name={id}
-                            disabled={disabled}
-                            rows={(props as TextareaInputProps).rows || (chat ? 2 : 6)}
-                            placeholder={placeholder}
-                            className={`${styles.styledInputArea} ${chat === 'chat' ? styles.chatTextarea : ''
-                                }`}
-                            autoComplete="off"
-                            value={(props as TextareaInputProps).value}
-                            maxLength={(props as TextareaInputProps).maxLength}
-                            onChange={onHandleChange || onChange}
-                        />
-                    </Fragment>
-                )}
-            </div>
+            {/* Textarea */}
+            {inputType === 'textarea' && (
+                <Fragment>
+                    <label htmlFor={id} className={styles.label}>
+                        {label}
+                    </label>
+                    <textarea
+                        id={id}
+                        name={id}
+                        disabled={disabled}
+                        rows={(props as TextareaInputProps).rows || (chat ? 2 : 6)}
+                        placeholder={placeholder}
+                        className={`${styles.styledInputArea} ${chat === 'chat' ? styles.chatTextarea : ''
+                            }`}
+                        autoComplete="off"
+                        value={(props as TextareaInputProps).value}
+                        maxLength={(props as TextareaInputProps).maxLength}
+                        onChange={onHandleChange || onChange}
+                    />
+                </Fragment>
+            )}
+
 
             {/* Send message input  */}
             {

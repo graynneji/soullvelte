@@ -23,7 +23,10 @@ import { capitalizeFirstLetter } from "@/app/_utils";
 import { Earnings, Patient, User } from "@/index";
 import { setSelectedPatientId } from "@/app/_store/selectedPatientIdSlice";
 import { usePreviousMsg } from "@/app/_hooks/usePreviousMsg";
-
+import { clearCachedUser } from "@/app/_lib/services";
+import { signOut } from "@/app/_lib/actions";
+import { SignOutIcon } from "@phosphor-icons/react/dist/ssr"
+import Button from "../Button/Button";
 
 interface PatientListProps {
     name: string;
@@ -127,6 +130,13 @@ const TherapistSidebar: React.FC<TherapistSidebarProps> = ({
     const conversations = usePreviousMsg(userId);
     const conversationEntries = Object.entries(conversations);
     const messageMap = new Map<string, any>(conversationEntries);
+    const [isPending, startTransition] = React.useTransition();
+    const handleSignout = () => {
+        startTransition(async () => {
+            await clearCachedUser()
+            await signOut();
+        });
+    };
 
 
     const filteredPatients = therapistPatients?.filter(
@@ -279,19 +289,17 @@ const TherapistSidebar: React.FC<TherapistSidebarProps> = ({
             {/* Quick actions at the bottom */}
             <div className={styles.profileDown}>
                 <div className={styles.quickActions}>
-                    <Link href="/dashboard/history">
+                    <Link href="#">
                         <div className={styles.actionItem}>
                             <ClockIcon size={20} weight="bold" />
                             <span>History</span>
                         </div>
                     </Link>
-                    <Link href="/dashboard/saved">
-                        <div className={styles.actionItem}>
-                            <BookmarkIcon size={20} weight="bold" />
-                            <span>Saved</span>
-                        </div>
-                    </Link>
-                    <Link href="/dashboard/settings">
+                    <div className={styles.actionItem} onClick={handleSignout}>
+                        <SignOutIcon size={20} weight="bold" />
+                        <span>Log out</span>
+                    </div>
+                    <Link href="#">
                         <div className={styles.actionItem}>
                             <GearSixIcon size={20} weight="bold" />
                             <span>Settings</span>

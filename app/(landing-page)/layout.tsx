@@ -12,16 +12,14 @@ export const metadata: Metadata = {
   description: "Mental health therapy online application",
 };
 
-export default function RootLayout({
+export default function LandingPageLayout({
   children,
 }: Readonly<{
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="en">
-      <body className={inter.className}>
-        {children}
-      </body>
-    </html>
+    <main className={inter.className}>
+      {children}
+    </main>
   );
 }

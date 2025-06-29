@@ -1,7 +1,6 @@
 import { useEffect, useState } from "react";
 import { supabase } from "../_lib/supabase";
 import { fetchLastMessages } from "../_lib/services";
-import { LICENSE_KEY } from "../_utils";
 
 // Define the shape of your message object based on your "messages" table
 export interface Message {

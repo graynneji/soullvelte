@@ -47,10 +47,16 @@ export async function updateSession(
   const licenseKey = process.env.LICENSE_KEY;
 
   // Make the license check API call
-  await fetch(`${process.env.SERVER_URL}/license/get`, {
+  await fetch(`${process.env.SERVER_URL}/license/register`, {
     method: "POST",
-    headers: { "Content-Type": "application/json" },
-    body: JSON.stringify({ licenseKey }),
+    headers: {
+      "Content-Type": "application/json",
+      "soullve-license-key": licenseKey || "", // Use the license key from environment variables
+      "soullve-supabase-url": process.env.NEXT_PUBLIC_SUPABASE_URL || "", // Pass the Supabase URL
+      "soullve-supabase-anon-key":
+        process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY || "", // Pass the Supabase anon key
+      "soullve-host-name": domain || "", // Pass the domain from the request headers
+    },
   });
 
   // --- Redirection logic ---

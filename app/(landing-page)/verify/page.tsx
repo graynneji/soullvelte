@@ -1,9 +1,11 @@
 import VerifyOTP from '@/app/_components/VerifyOTP/VerifyOTP'
-import React from 'react'
+import { Suspense } from "react";
 
 function Page() {
     return (
-        <VerifyOTP />
+        <Suspense fallback={<div>Loading...</div>}>
+            <VerifyOTP />
+        </Suspense>
     )
 }
 

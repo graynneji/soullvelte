@@ -89,7 +89,6 @@ const Appointment: React.FC = () => {
             }
             const resAppointment = await fetchAppointments(userId, therapistId);
             if (resAppointment.error || !resAppointment.data) {
-                console.log(resAppointment.error, resAppointment.data);
                 throw new Error(resAppointment.error);
             }
             setEvents(resAppointment.data || []);

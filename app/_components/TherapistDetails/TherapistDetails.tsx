@@ -1,6 +1,6 @@
 import { usePathname, useSearchParams } from "next/navigation";
 import styles from "./TherapistDetails.module.css";
-import React, { useState, useTransition } from "react";
+import React, { useTransition } from "react";
 import { BrainIcon, CalendarCheckIcon, CertificateIcon, ChatsIcon, ChatTeardropTextIcon, DotsThreeOutlineIcon, LockSimpleIcon, PhoneCallIcon, SealCheckIcon, SignOutIcon, UserCircleIcon, UsersThreeIcon, VideoCameraIcon } from "@phosphor-icons/react/dist/ssr";
 import Link from "next/link";
 import Menu from "../Menu/Menu";
