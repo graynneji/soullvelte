@@ -65,7 +65,7 @@ const TherapistSignup: React.FC = () => {
                                     }
 
                                     const error = await register(formData);
-                                    if (error) setError(error)
+                                    if (typeof error === "string" && error) setError(error)
                                 } catch (err) {
                                     setError("Internal server error")
                                 }

@@ -55,11 +55,6 @@ export const login = async (formData: FormData): Promise<string | {}> => {
       data?.user?.user_metadata?.designation === "therapist";
 
     if (!error) {
-      // const redirectUrl: string = designation ? "/provider" : "/session";
-
-      // Revalidate cache and redirect
-      // revalidatePath("/", "layout");
-      // redirect(redirectUrl);
       return { redirectUrl: designation ? "/provider" : "/session" };
     } else {
       // Return specific error message if available
@@ -303,13 +298,6 @@ export async function signup(
     }
 
     // Revalidate and redirect to verification page
-    // revalidatePath("/", "layout");
-    // redirect(
-    //   `/verify?email=${formData.get("email")}&type=${
-    //     isPatientAnswers(selectedQuesAnswers) ? "patient" : selectedQuesAnswers
-    //   }`
-    // );
-
     return {
       redirectUrl: `/verify?email=${formData.get("email")}&type=${
         isPatientAnswers(selectedQuesAnswers) ? "patient" : selectedQuesAnswers
